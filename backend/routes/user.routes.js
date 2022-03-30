@@ -15,6 +15,7 @@ const userControlls = require("../controllers/user");
 const uploadController = require("../controllers/upload");
 const multer = require("multer");
 const upload = multer();
+const { checkUser } = require("../middlewares/auth");
 
 // Mise en place des chemins d'acces au routes
 // Route pour l'inscription
@@ -25,10 +26,10 @@ router.post("/login", limitConnect, userAuth.login);
 router.get("/logout", userAuth.logout);
 
 // Route de modif et delete et avoir tous les users et avoir un seul user dans la db
-router.get("/", userControlls.getAllUsers);
-router.get("/:id", userControlls.getOneUser);
-router.put("/:id", userControlls.updtateUser);
-router.delete("/:id", userControlls.deleteUser);
+router.get("/", checkUser, userControlls.getAllUsers);
+router.get("/:id", checkUser, userControlls.getOneUser);
+router.put("/:id", checkUser, userControlls.updtateUser);
+router.delete("/:id", checkUser, userControlls.deleteUser);
 
 // upload
 router.post("/upload", upload.single("file"), uploadController.uploadProfil);

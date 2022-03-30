@@ -36,7 +36,7 @@ app.use(cookieParser());
 
 // verification lors de l'arrive du client sur notre site si il a un token si oui on le connect direct sans demander son email et mot de passe
 app.get("/jwtid", requireAuth, (req, res) => {
-	res.status(200).send(res.locals.user._id);
+	res.status(200).send(res.locals.user.idUSER);
 });
 
 // Routes

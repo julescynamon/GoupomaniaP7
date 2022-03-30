@@ -1,29 +1,32 @@
-const userModel = require("../models/user");
-const objectId = require("mongoose").Types.ObjectId;
+// importation de la connexion mysql
+const dbConnexion = require("../config/db");
 
 module.exports.getAllUsers = async (req, res) => {
-	// on va chercher la table userModel et on prends tout
-	const users = await userModel.find().select("-password");
-	res.status(200).json(users);
+	dbConnexion.query(
+		"SELECT idUSER, username, isAdmin, bio, email, picture FROM user",
+		(err, results) => {
+			if (err) {
+				res.status(404).json({ err });
+				throw err;
+			}
+			delete results[0].password;
+			res.status(200).json(results);
+		},
+	);
 };
 
 module.exports.getOneUser = async (req, res) => {
-	console.log(req.params);
-	// on verifie si l'id passer dans la requete est contenue dans la db
-	if (!objectId.isValid(req.params.id))
-		return res.status(400).send("ID non reconnue : " + req.params.id);
-
-	// Si oui on continue la requete
-	userModel
-		.findById(req.params.id, (err, docs) => {
-			if (!err) {
-				res.send(docs);
-			} else {
-				console.log("ID non reconnue : " + req.params.id);
+	dbConnexion.query(
+		`SELECT * FROM user WHERE idUSER=${req.params.id}`,
+		(err, results) => {
+			if (err) {
+				res.status(404).json({ err });
+				throw err;
 			}
-		})
-		.select("-password");
-	// -password signifie que l'on ne veut pas voir le password dans la reponse json question de securite
+			delete results[0].user_password;
+			res.status(200).json(results);
+		},
+	);
 };
 
 module.exports.updtateUser = async (req, res) => {
@@ -52,14 +55,16 @@ module.exports.updtateUser = async (req, res) => {
 };
 
 module.exports.deleteUser = async (req, res) => {
-	// on verifie si l'id passer dans la requete est contenue dans la db
-	if (!objectId.isValid(req.params.id))
-		return res.status(400).send("ID non reconnue : " + req.params.id);
-
-	try {
-		await userModel.remove({ _id: req.params.id }).exec();
-		res.status(200).json({ message: "utilisateur supprimer !" });
-	} catch (err) {
-		return res.status(500).json({ message: err });
-	}
+	dbConnexion.query(
+		`DELETE FROM user WHERE idUSER=${req.params.id}`,
+		req.params.id,
+		function (error) {
+			if (error) {
+				return res.status(400).json(error);
+			}
+			return res
+				.status(200)
+				.json({ message: "Votre compte a bien été supprimé !" });
+		},
+	);
 };
