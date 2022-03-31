@@ -24,7 +24,9 @@ module.exports.checkUser = (req, res, next) => {
 		if (req.cookies.jwt) {
 			const token = req.cookies.jwt;
 			const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
-			const { idUSER: userId } = decodedToken;
+			console.log(decodedToken);
+			const { userId: userId } = decodedToken;
+			console.log(decodedToken);
 
 			const sql = `SELECT idUSER FROM user WHERE idUSER=${userId}`;
 			dbConnexion.query(sql, (err, results) => {

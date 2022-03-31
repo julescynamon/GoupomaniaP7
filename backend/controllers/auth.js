@@ -60,7 +60,7 @@ module.exports.login = async (req, res) => {
 
 							// on genere le token si tout est valide
 							const token = jwt.sign(
-								{ userId: results[0].id },
+								{ userId: results[0].IdUSER },
 								`${process.env.JWT_TOKEN}`,
 								{ expiresIn: "24h" },
 							);
@@ -68,9 +68,9 @@ module.exports.login = async (req, res) => {
 							// on enleve le password de la reponse pour plus de sécurité
 							delete results[0].password;
 
-							res.cookie("jwt", token);
+							res.cookie("jwt", token, { httpOnly: true });
 							res.status(200).json({
-								user: results[0],
+								user: results[0].IdUSER,
 								token,
 							});
 						})
@@ -84,7 +84,7 @@ module.exports.login = async (req, res) => {
 	}
 };
 
-module.exports.logout = async (req, res) => {
+exports.logout = (req, res) => {
 	res.clearCookie("jwt");
-	res.redirect("/");
+	res.status(200).json("OUT");
 };
