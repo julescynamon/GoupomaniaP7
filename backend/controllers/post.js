@@ -1,9 +1,7 @@
-const postModel = require("../models/post");
-const userModel = require("../models/user");
 const objectId = require("mongoose").Types.ObjectId;
 // Mise en place du package fs pour interagir avec le système de fichiers du serveur.
 const fs = require("fs");
-const { uploadErrors } = require("../utils/errors");
+
 // je charge promisify natif sur node pour utiliser une promesse dans une fonction callback
 const { promisify } = require("util");
 // grace a pipeline je vais rechercher par une source externe une donnee ici la photo et j'utilise promisify pour pouvoir renvoyer cette donnee;
@@ -37,8 +35,7 @@ module.exports.createPost = async (req, res) => {
 
 			if (req.file.size > 500000) throw Error("max size");
 		} catch (err) {
-			const errors = uploadErrors(err);
-			return res.status(201).json({ errors });
+			return res.status(201).json({ err });
 		}
 		fileName = req.body.posterId + Date.now() + ".jpg";
 

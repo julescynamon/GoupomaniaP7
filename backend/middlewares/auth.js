@@ -26,7 +26,7 @@ module.exports.checkUser = (req, res, next) => {
 			const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
 			console.log(decodedToken);
 			const { userId: userId } = decodedToken;
-			console.log(decodedToken);
+			console.log(userId);
 
 			const sql = `SELECT idUSER FROM user WHERE idUSER=${userId}`;
 			dbConnexion.query(sql, (err, results) => {

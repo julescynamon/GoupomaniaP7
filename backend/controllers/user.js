@@ -23,35 +23,39 @@ module.exports.getOneUser = async (req, res) => {
 				res.status(404).json({ err });
 				throw err;
 			}
-			delete results[0].user_password;
+			delete results[0].password;
 			res.status(200).json(results);
 		},
 	);
 };
 
-module.exports.updtateUser = async (req, res) => {
-	// on verifie si l'id passer dans la requete est contenue dans la db
-	if (!objectId.isValid(req.params.id))
-		return res.status(400).send("ID non reconnue : " + req.params.id);
+exports.updateOneUser = (req, res, next) => {
+	if (req.file) {
+		const userId = req.params.id;
+		let { destination, filename } = req.file;
+		destination = destination + filename;
 
-	try {
-		// si l'id est valide on attend le userModel et on lui modifie la bio
-		await userModel.findOneAndUpdate(
-			{ _id: req.params.id },
-			{
-				$set: {
-					bio: req.body.bio,
-				},
-			},
-			{ new: true, upsert: true, setDefaultsOnInsert: true },
-			(err, docs) => {
-				if (!err) return res.send(docs);
-				if (err) return res.status(500).json({ message: err });
-			},
-		);
-	} catch (err) {
-		return res.status(500).json({ message: err });
+		const sqlInsertImage = `INSERT INTO images (post_id, user_id, image_url) VALUES (NULL, ${userId}, "${destination}");`;
+		db.query(sqlInsertImage, (err, result) => {
+			if (err) {
+				res.status(404).json({ err });
+				throw err;
+			}
+		});
 	}
+
+	const { user_firstname, user_lastname } = req.body;
+	const { id: userId } = req.params;
+	const sqlUpdateUser = `UPDATE users SET user_firstname = "${user_firstname}", user_lastname = "${user_lastname}" WHERE users.user_id = ${userId};`;
+	db.query(sqlUpdateUser, (err, result) => {
+		if (err) {
+			res.status(404).json({ err });
+			throw err;
+		}
+		if (result) {
+			res.status(200).json(result);
+		}
+	});
 };
 
 module.exports.deleteUser = async (req, res) => {
