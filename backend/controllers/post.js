@@ -1,67 +1,29 @@
-const objectId = require("mongoose").Types.ObjectId;
-// Mise en place du package fs pour interagir avec le système de fichiers du serveur.
-const fs = require("fs");
-
-// je charge promisify natif sur node pour utiliser une promesse dans une fonction callback
-const { promisify } = require("util");
-// grace a pipeline je vais rechercher par une source externe une donnee ici la photo et j'utilise promisify pour pouvoir renvoyer cette donnee;
-const pipeline = promisify(require("stream").pipeline);
+// importation de la connexion mysql
+const dbConnexion = require("../config/db");
+// importation du models des posts
+const postModel = require("../models/post");
 
 // controllers pour recuperer tous les posts de l'app
 module.exports.readPost = (req, res) => {
-	postModel
-		.find((err, docs) => {
-			if (!err) {
-				res.send(docs);
-			} else {
-				console.log("erreur pour avoir les datas: " + err);
+	dbConnexion.query(
+		"SELECT * FROM post ORDER BY timestamp DESC;",
+		(err, result) => {
+			if (err) {
+				res.status(404).json({
+					message: "erreur pour accéder au data",
+				});
+				throw err;
 			}
-		})
-		.sort({ created: -1 });
+			res.status(200).json(result);
+		},
+	);
 };
 
 // controllers pour creer un post
 module.exports.createPost = async (req, res) => {
-	let fileName;
-
-	if (req.file !== null) {
-		try {
-			if (
-				req.file.detectedMimeType != "image/jpg" &&
-				req.file.detectedMimeType != "image/png" &&
-				req.file.detectedMimeType != "image/jpeg"
-			)
-				throw Error("invalid file");
-
-			if (req.file.size > 500000) throw Error("max size");
-		} catch (err) {
-			return res.status(201).json({ err });
-		}
-		fileName = req.body.posterId + Date.now() + ".jpg";
-
-		await pipeline(
-			req.file.stream,
-			fs.createWriteStream(
-				`${__dirname}/../client/public/uploads/posts/${fileName}`,
-			),
-		);
-	}
-
-	const newPost = new postModel({
-		posterId: req.body.posterId,
-		message: req.body.message,
-		picture: req.file !== null ? "./uploads/posts/" + fileName : "",
-		video: req.body.video,
-		likers: [],
-		comments: [],
-	});
-
-	try {
-		const post = await newPost.save();
-		return res.status(201).json(post);
-	} catch (err) {
-		return res.status(400).send(err);
-	}
+	console.log(req.body);
+	console.log(req.body.post);
+	console.log(req.file);
 };
 
 // controllers pour modifier un post

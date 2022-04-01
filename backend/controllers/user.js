@@ -30,20 +30,6 @@ module.exports.getOneUser = async (req, res) => {
 };
 
 exports.updateOneUser = (req, res, next) => {
-	if (req.file) {
-		const userId = req.params.id;
-		let { destination, filename } = req.file;
-		destination = destination + filename;
-
-		const sqlInsertImage = `INSERT INTO user (picture) VALUES (NULL, ${userId}, "${destination}");`;
-		dbConnexion.query(sqlInsertImage, (err, result) => {
-			if (err) {
-				res.status(404).json({ err });
-				throw err;
-			}
-		});
-	}
-
 	const { username, bio } = req.body;
 	console.log(username);
 	console.log(bio);
