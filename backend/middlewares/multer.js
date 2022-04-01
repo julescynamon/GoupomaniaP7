@@ -1,7 +1,5 @@
 // Import de multer
 const multer = require("multer");
-// mise en place du package path pour accéder au path de notre serveur
-const path = require("path");
 
 // Mise en place d'un middleware avec multer qui est un  package qui nous permet de gérer les fichiers entrants dans les requêtes HTTP
 
@@ -16,14 +14,18 @@ const MIME_TYPES = {
 2 éléments : destination, et filename) de multer 
 que l'on passe à la méthode diskStorage */
 const storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		if (file.fieldname === "picture")
-			cb(null, "../../frontend/public/uploads/posts/");
+	destination: (req, file, callback) => {
+		callback(null, "../../frontend/public/uploads");
 	},
 	filename: (req, file, callback) => {
-		callback(null, Date.now() + path.extname(file.originalname));
+		// génère nom du fichier, élimine les espaces avec split et join
+		const name = file.originalname.split(" ").join("_");
+		// accès mimetype (ex: image/png) appelé par notre dictionnaire
+		const extension = MIME_TYPES[file.mimetype];
+		//  génère un nom, ajout d'un time-stamp et extension
+		callback(null, name + Date.now() + "." + extension);
 	},
-	//  génère une limite de taille (ici 5go) pour les photos telecharger sécurise un peu plus l'API
+	//  génère une limite de taille (ici ) pour les photos telecharger sécurise un peu plus l'API
 	limits: {
 		fileSize: 500000,
 	},
@@ -32,4 +34,4 @@ const storage = multer.diskStorage({
 // export du middleware multer configuré en passant l'objet storage,avec single pour un fichier image unique
 module.exports = multer({
 	storage: storage,
-}).single("../../frontend/public/uploads/");
+}).single("../../frontend/public/uploads");

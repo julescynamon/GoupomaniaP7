@@ -23,6 +23,16 @@ module.exports.readPost = (req, res) => {
 module.exports.createPost = async (req, res) => {
 	console.log(req.body);
 	console.log(req.body.post);
+	// récupérer les champs dans le corps de la requête
+	const postBody = JSON.parse(req.body.post);
+	// nouvelle Sauce
+	const post = new postModel({
+		...postBody,
+		// résolution de l'URL de l'image
+		picture: `${req.protocol}://${req.get(
+			"host",
+		)}/../../frontend/public/uploads/${req.file.filename}`,
+	});
 	console.log(req.file);
 };
 
