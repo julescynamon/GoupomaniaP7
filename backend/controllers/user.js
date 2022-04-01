@@ -35,8 +35,8 @@ exports.updateOneUser = (req, res, next) => {
 		let { destination, filename } = req.file;
 		destination = destination + filename;
 
-		const sqlInsertImage = `INSERT INTO images (post_id, user_id, image_url) VALUES (NULL, ${userId}, "${destination}");`;
-		db.query(sqlInsertImage, (err, result) => {
+		const sqlInsertImage = `INSERT INTO user (picture) VALUES (NULL, ${userId}, "${destination}");`;
+		dbConnexion.query(sqlInsertImage, (err, result) => {
 			if (err) {
 				res.status(404).json({ err });
 				throw err;
@@ -44,18 +44,23 @@ exports.updateOneUser = (req, res, next) => {
 		});
 	}
 
-	const { user_firstname, user_lastname } = req.body;
+	const { username, bio } = req.body;
+	console.log(username);
+	console.log(bio);
 	const { id: userId } = req.params;
-	const sqlUpdateUser = `UPDATE users SET user_firstname = "${user_firstname}", user_lastname = "${user_lastname}" WHERE users.user_id = ${userId};`;
-	db.query(sqlUpdateUser, (err, result) => {
-		if (err) {
-			res.status(404).json({ err });
-			throw err;
-		}
-		if (result) {
-			res.status(200).json(result);
-		}
-	});
+	console.log(userId);
+	dbConnexion.query(
+		`UPDATE user SET username = "${username}", bio = "${bio}" WHERE user.idUSER = ${userId};`,
+		(err, result) => {
+			if (err) {
+				res.status(404).json({ err });
+				throw err;
+			}
+			if (result) {
+				res.status(200).json(result);
+			}
+		},
+	);
 };
 
 module.exports.deleteUser = async (req, res) => {

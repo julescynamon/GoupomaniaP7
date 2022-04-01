@@ -39,6 +39,12 @@ app.get("/jwtid", requireAuth, (req, res) => {
 	res.status(200).send(res.locals.user.idUSER);
 });
 
+// Nous devons autoriser express à servir les fichiers publics afin de pouvoir diffuser les images téléchargées.
+app.use(
+	"../frontend/public/uploads",
+	express.static(path.join(__dirname, "../frontend/public/uploads")),
+);
+
 // Routes
 app.use("/api/user", userRoutes);
 app.use("/api/post", postRoutes);
