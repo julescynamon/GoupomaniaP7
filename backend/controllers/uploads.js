@@ -1,3 +1,5 @@
+// importation de la connexion mysql
+const dbConnexion = require("../config/db");
 const UserModel = require("../models/user");
 const fs = require("fs");
 const { promisify } = require("util");
@@ -28,13 +30,17 @@ module.exports.uploadProfil = async (req, res) => {
 	);
 
 	try {
-		await UserModel.findByIdAndUpdate(
-			req.body.userId,
-			{ $set: { picture: "./uploads/profil/" + fileName } },
-			{ new: true, upsert: true, setDefaultsOnInsert: true },
-		)
-			.then((data) => res.send(data))
-			.catch((err) => res.status(500).send({ message: err }));
+		dbConnexion.query(
+			`UPDATE user SET picture = ${fileName} WHERE 6`,
+			(err, results) => {
+				if (err) {
+					res.status(404).json({ err });
+					throw err;
+				} else {
+					res.status(200).json(results);
+				}
+			},
+		);
 	} catch (err) {
 		return res.status(500).send({ message: err });
 	}
