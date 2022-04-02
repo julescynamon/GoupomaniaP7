@@ -26,9 +26,9 @@ module.exports.readPost = (req, res) => {
 // controllers pour creer un post
 module.exports.createPost = async (req, res) => {
 	let fileName;
-	let { body, file } = req;
+	let body = req.body;
 
-	if (file !== null) {
+	if (req.file !== null) {
 		try {
 			if (
 				req.file.detectedMimeType != "image/jpg" &&
@@ -42,7 +42,7 @@ module.exports.createPost = async (req, res) => {
 			const errors = uploadErrors(err);
 			return res.status(201).json({ errors });
 		}
-		fileName = req.body.posterId + Date.now() + ".jpg";
+		fileName = req.body.userId + Date.now() + ".jpg";
 
 		await pipeline(
 			req.file.stream,
@@ -58,8 +58,14 @@ module.exports.createPost = async (req, res) => {
 	};
 
 	try {
-		const post = await newPost.save();
-		return res.status(201).json(post);
+		dbConnexion.query("INSERT INTO posts SET ?", body, (err, results) => {
+			if (err) {
+				res.status(404).json({ err });
+				throw err;
+			} else {
+				res.status(200).json(results);
+			}
+		});
 	} catch (err) {
 		return res.status(400).send(err);
 	}
