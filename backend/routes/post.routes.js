@@ -1,18 +1,27 @@
 const router = require("express").Router();
 const postController = require("../controllers/post");
-// import middleware multer pour le traitement des images à télécharger
-const multer = require("../middlewares/multer");
+const multer = require("multer");
+const upload = multer();
+const { checkUser } = require("../middlewares/auth");
 
-router.get("/", postController.readPost);
-router.post("/", multer, postController.createPost);
-router.put("/:id", multer, postController.updatePost);
-router.delete("/:id", postController.deletePost);
-router.patch("/like-post/:id", postController.likePost);
-router.patch("/unlike-post/:id", postController.unLikePost);
+router.get("/", checkUser, postController.readPost);
+router.post("/", checkUser, upload.single("file"), postController.createPost);
+router.put("/:id", checkUser, upload.single("file"), postController.updatePost);
+router.delete("/:id", checkUser, postController.deletePost);
+router.patch("/like-post/:id", checkUser, postController.likePost);
+router.patch("/unlike-post/:id", checkUser, postController.unLikePost);
 
 // comments
-router.patch("/comment-post/:id", postController.commentPost);
-router.patch("/edit-comment-post/:id", postController.editCommentPost);
-router.patch("/delete-comment-post/:id", postController.deleteCommentPost);
+router.patch("/comment-post/:id", checkUser, postController.commentPost);
+router.patch(
+	"/edit-comment-post/:id",
+	checkUser,
+	postController.editCommentPost,
+);
+router.patch(
+	"/delete-comment-post/:id",
+	checkUser,
+	postController.deleteCommentPost,
+);
 
 module.exports = router;

@@ -12,6 +12,9 @@ const limitConnect = require("../middlewares/connectParams");
 const userAuth = require("../controllers/auth");
 const userControlls = require("../controllers/user");
 const { checkUser } = require("../middlewares/auth");
+const uploadController = require("../controllers/uploads");
+const multer = require("multer");
+const upload = multer();
 
 // Mise en place des chemins d'acces au routes
 // Route pour l'inscription
@@ -26,6 +29,9 @@ router.get("/", checkUser, userControlls.getAllUsers);
 router.get("/:id", checkUser, userControlls.getOneUser);
 router.put("/:id", checkUser, userControlls.updateOneUser);
 router.delete("/:id", checkUser, userControlls.deleteUser);
+
+// route pour l'upload de la photo de profil de l'utilisateur
+router.post("/upload", upload.single("file"), uploadController.uploadProfil);
 
 // exporter ce router
 module.exports = router;

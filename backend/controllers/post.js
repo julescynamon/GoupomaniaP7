@@ -2,6 +2,10 @@
 const dbConnexion = require("../config/db");
 // importation du models des posts
 const postModel = require("../models/post");
+const fs = require("fs");
+const { promisify } = require("util");
+const pipeline = promisify(require("stream").pipeline);
+const { uploadErrors } = require("../utils/errors");
 
 // controllers pour recuperer tous les posts de l'app
 module.exports.readPost = (req, res) => {
@@ -21,19 +25,44 @@ module.exports.readPost = (req, res) => {
 
 // controllers pour creer un post
 module.exports.createPost = async (req, res) => {
-	console.log(req.body);
-	console.log(req.body.post);
-	// récupérer les champs dans le corps de la requête
-	const postBody = JSON.parse(req.body.post);
-	// nouvelle Sauce
-	const post = new postModel({
-		...postBody,
-		// résolution de l'URL de l'image
-		picture: `${req.protocol}://${req.get(
-			"host",
-		)}/../../frontend/public/uploads/${req.file.filename}`,
-	});
-	console.log(req.file);
+	let fileName;
+	let { body, file } = req;
+
+	if (file !== null) {
+		try {
+			if (
+				req.file.detectedMimeType != "image/jpg" &&
+				req.file.detectedMimeType != "image/png" &&
+				req.file.detectedMimeType != "image/jpeg"
+			)
+				throw Error("invalid file");
+
+			if (req.file.size > 500000) throw Error("max size");
+		} catch (err) {
+			const errors = uploadErrors(err);
+			return res.status(201).json({ errors });
+		}
+		fileName = req.body.posterId + Date.now() + ".jpg";
+
+		await pipeline(
+			req.file.stream,
+			fs.createWriteStream(
+				`${__dirname}/../client/public/uploads/${fileName}`,
+			),
+		);
+	}
+
+	body = {
+		...body,
+		likes: "",
+	};
+
+	try {
+		const post = await newPost.save();
+		return res.status(201).json(post);
+	} catch (err) {
+		return res.status(400).send(err);
+	}
 };
 
 // controllers pour modifier un post
