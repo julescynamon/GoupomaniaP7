@@ -58,9 +58,7 @@ module.exports.createPost = async (req, res) => {
 
 		await pipeline(
 			req.file.stream,
-			fs.createWriteStream(
-				`${__dirname}/../../uploads/profils/${fileName}`,
-			),
+			fs.createWriteStream(`/../../uploads/profils/${fileName}`),
 		);
 	}
 
@@ -102,18 +100,20 @@ exports.deletePost = (req, res, next) => {
 
 // controllers pour commenter un post
 module.exports.commentPost = (req, res) => {
-	const { message, commentIdPost, commentIdUser } = req.body;
-	dbConnexion.query(
-		`INSERT INTO comments (id, commentIdPost, commentIdUser, message) VALUES (NULL, ${commentIdPost}, ${commentIdUser}, "${message}")`,
-		(err, result) => {
-			if (err) {
-				res.status(404).json({ err });
-				console.log(err);
-				throw err;
-			}
-			res.status(200).json(result);
-		},
-	);
+	const body = {
+		idCreateur: req.body.idCreateur,
+		idPublication: req.body.idPublication,
+		message: req.body.message,
+	};
+	console.log(body);
+	dbConnexion.query("INSERT INTO comment SET ?", body, (err, result) => {
+		if (err) {
+			res.status(404).json({ err });
+			console.log(err);
+			throw err;
+		}
+		res.status(200).json(result);
+	});
 };
 
 // controller pour voir tous les commentaires
@@ -129,10 +129,9 @@ exports.getAllComment = (req, res, next) => {
 
 // controller pour voir un commentaire
 exports.getOneComment = (req, res, next) => {
-	//ORDER BY created_at DESC
+	const id = req.params.id;
 	dbConnexion.query(
-		"SELECT * FROM comment  WHERE idCOM= ?",
-		req.params.id,
+		`SELECT * FROM comment  WHERE idCOM= ${id}`,
 		(error, result) => {
 			if (error) {
 				return res.status(400).json({ error });
