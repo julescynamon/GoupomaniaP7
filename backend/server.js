@@ -7,7 +7,7 @@ require("./config/db");
 // Mise en place du package Helmet pour pour pouvoir respecter les standars de securite
 const helmet = require("helmet");
 // mise en place du package path pour accéder au path de notre serveur
-const path = require("path");
+// const path = require("path");
 // on appel la fonction qui check le token du user;
 const { requireAuth } = require("./middlewares/auth");
 const cors = require("cors");
@@ -40,10 +40,10 @@ app.get("/jwtid", requireAuth, (req, res) => {
 });
 
 // Nous devons autoriser express à servir les fichiers publics afin de pouvoir diffuser les images téléchargées.
-app.use(
-	"../../frontend/public/uploads",
-	express.static(path.join(__dirname, "../../frontend/public/uploads")),
-);
+// app.use(
+// 	"../../frontend/public/uploads",
+// 	express.static(path.join(__dirname, "../../frontend/public/uploads")),
+// );
 
 // Routes
 app.use("/api/user", userRoutes);

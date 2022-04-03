@@ -1,6 +1,5 @@
 // importation de la connexion mysql
 const dbConnexion = require("../config/db");
-const UserModel = require("../models/user");
 const fs = require("fs");
 const { promisify } = require("util");
 const pipeline = promisify(require("stream").pipeline);
@@ -20,18 +19,17 @@ module.exports.uploadProfil = async (req, res) => {
 		const errors = uploadErrors(err);
 		return res.status(201).json({ errors });
 	}
-	const fileName = req.body.name + ".jpg";
+	const fileName = req.body.username + ".jpg";
 
 	await pipeline(
 		req.file.stream,
-		fs.createWriteStream(
-			`${__dirname}/../client/public/uploads/profil/${fileName}`,
-		),
+		fs.createWriteStream(`${__dirname}/../../uploads/profils/${fileName}`),
 	);
 
 	try {
+		const { id: idUSER } = req.params;
 		dbConnexion.query(
-			`UPDATE user SET picture = ${fileName} WHERE 6`,
+			`UPDATE user SET picture = "./uploads/profils/" + ${fileName} WHERE id = ${idUSER}`,
 			(err, results) => {
 				if (err) {
 					res.status(404).json({ err });

@@ -3,7 +3,7 @@ const dbConnexion = require("../config/db");
 
 module.exports.getAllUsers = async (req, res) => {
 	dbConnexion.query(
-		"SELECT idUSER, username, isAdmin, bio, email, picture FROM user",
+		"SELECT idUSER, username, bio, email, picture FROM user",
 		(err, results) => {
 			if (err) {
 				res.status(404).json({ err });

@@ -31,7 +31,7 @@ router.put("/:id", checkUser, userControlls.updateOneUser);
 router.delete("/:id", checkUser, userControlls.deleteUser);
 
 // route pour l'upload de la photo de profil de l'utilisateur
-router.post("/upload", upload.single("file"), uploadController.uploadProfil);
+router.post("/upload", upload.single("picture"), uploadController.uploadProfil);
 
 // exporter ce router
 module.exports = router;
