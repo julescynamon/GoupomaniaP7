@@ -1,7 +1,5 @@
 // importation de la connexion mysql
 const dbConnexion = require("../config/db");
-// importation du models des posts
-const postModel = require("../models/post");
 const fs = require("fs");
 const { promisify } = require("util");
 const pipeline = promisify(require("stream").pipeline);
@@ -23,10 +21,24 @@ module.exports.readPost = (req, res) => {
 	);
 };
 
+//controller pour afficher le post séléctionner
+exports.readOnePost = (req, res) => {
+	dbConnexion.query(
+		"SELECT * FROM post WHERE idPOST= ?",
+		req.params.id,
+		(error, result) => {
+			if (error) {
+				return res.status(400).json({ error });
+			}
+
+			return res.status(200).json(result);
+		},
+	);
+};
+
 // controllers pour creer un post
 module.exports.createPost = async (req, res) => {
 	let fileName;
-	let body = req.body;
 
 	if (req.file !== null) {
 		try {
@@ -47,18 +59,17 @@ module.exports.createPost = async (req, res) => {
 		await pipeline(
 			req.file.stream,
 			fs.createWriteStream(
-				`${__dirname}/../client/public/uploads/${fileName}`,
+				`${__dirname}/../../uploads/profils/${fileName}`,
 			),
 		);
 	}
 
-	body = {
-		...body,
-		likes: "",
-	};
+	let { body, file } = req;
+	if (!file) delete req.body.picture;
+	body = req.body;
 
 	try {
-		dbConnexion.query("INSERT INTO posts SET ?", body, (err, results) => {
+		dbConnexion.query("INSERT INTO post SET ?", body, (err, results) => {
 			if (err) {
 				res.status(404).json({ err });
 				throw err;
@@ -71,178 +82,79 @@ module.exports.createPost = async (req, res) => {
 	}
 };
 
-// controllers pour modifier un post
-module.exports.updatePost = (req, res) => {
-	if (!objectId.isValid(req.params.id))
-		return res.status(400).send("ID unknown : " + req.params.id);
-
-	const updatedRecord = {
-		message: req.body.message,
-	};
-
-	postModel.findByIdAndUpdate(
+// controllers pour supprimer un post
+exports.deletePost = (req, res, next) => {
+	dbConnexion.query(
+		`DELETE FROM post WHERE userId=${req.params.id}`,
 		req.params.id,
-		{ $set: updatedRecord },
-		{ new: true },
-		(err, docs) => {
-			if (!err) res.send(docs);
-			else console.log("Update error : " + err);
+		function (error) {
+			if (error) {
+				return res.status(400).json(error);
+			}
+			return res
+				.status(200)
+				.json({ message: "Votre poste a bien été supprimé !" });
 		},
 	);
 };
 
-// controllers pour supprimer un post
-module.exports.deletePost = (req, res) => {
-	if (!objectId.isValid(req.params.id))
-		return res.status(400).send("ID unknown : " + req.params.id);
-
-	postModel.findByIdAndRemove(req.params.id, (err, docs) => {
-		if (!err) res.send(docs);
-		else console.log("Delete error : " + err);
-	});
-};
-
-// controllers pour liker un post
-module.exports.likePost = async (req, res) => {
-	if (!objectId.isValid(req.params.id))
-		return res.status(400).send("ID unknown : " + req.params.id);
-
-	try {
-		await postModel
-			.findByIdAndUpdate(
-				req.params.id,
-				{
-					$addToSet: { likers: req.body.id },
-				},
-				{ new: true },
-			)
-			.then((docs) => res.send(docs))
-			.catch((err) => res.status(500).send({ message: err }));
-
-		await userModel
-			.findByIdAndUpdate(
-				req.body.id,
-				{
-					$addToSet: { likes: req.params.id },
-				},
-				{ new: true },
-			)
-			.then((docs) => res.send(docs))
-			.catch((err) => res.status(500).send({ message: err }));
-	} catch (err) {
-		return res.status(400).send(err);
-	}
-};
-
-// controllers pour enlever le like au meme post
-module.exports.unLikePost = async (req, res) => {
-	if (!objectId.isValid(req.params.id))
-		return res.status(400).send("ID unknown : " + req.params.id);
-
-	try {
-		await postModel
-			.findByIdAndUpdate(
-				req.params.id,
-				{
-					$pull: { likers: req.body.id },
-				},
-				{ new: true },
-			)
-			.then((docs) => res.send(docs))
-			.catch((err) => res.status(500).send({ message: err }));
-
-		await userModel
-			.findByIdAndUpdate(
-				req.body.id,
-				{
-					$pull: { likes: req.params.id },
-				},
-				{ new: true },
-			)
-			.then((docs) => res.send(docs))
-			.catch((err) => res.status(500).send({ message: err }));
-	} catch (err) {
-		return res.status(400).send(err);
-	}
-};
+// ---------------------- COMMENTS ----------------------
 
 // controllers pour commenter un post
 module.exports.commentPost = (req, res) => {
-	if (!objectId.isValid(req.params.id))
-		return res.status(400).send("ID unknown : " + req.params.id);
-
-	try {
-		return postModel
-			.findByIdAndUpdate(
-				req.params.id,
-				{
-					$push: {
-						comments: {
-							commenterId: req.body.commenterId,
-							commenterPseudo: req.body.commenterPseudo,
-							text: req.body.text,
-							timestamp: new Date().getTime(),
-						},
-					},
-				},
-				{ new: true },
-			)
-			.then((docs) => res.send(docs))
-			.catch((err) => res.status(500).send({ message: err }));
-	} catch (err) {
-		return res.status(400).send(err);
-	}
+	const { message, commentIdPost, commentIdUser } = req.body;
+	dbConnexion.query(
+		`INSERT INTO comments (id, commentIdPost, commentIdUser, message) VALUES (NULL, ${commentIdPost}, ${commentIdUser}, "${message}")`,
+		(err, result) => {
+			if (err) {
+				res.status(404).json({ err });
+				console.log(err);
+				throw err;
+			}
+			res.status(200).json(result);
+		},
+	);
 };
 
-// controllers pour modier un commentaire
-module.exports.editCommentPost = (req, res) => {
-	if (!objectId.isValid(req.params.id))
-		return res.status(400).send("ID unknown : " + req.params.id);
+// controller pour voir tous les commentaires
+exports.getAllComment = (req, res, next) => {
+	dbConnexion.query("SELECT * FROM comment", (error, result) => {
+		if (error) {
+			return res.status(400).json(error);
+		}
 
-	try {
-		return postModel.findById(req.params.id, (err, docs) => {
-			const theComment = docs.comments.find((comment) => {
-				comment._id.equals(req.body.commentId);
-			});
-			if (!theComment) {
-				res.status(404).send("commentaire non trouvé !");
-			} else {
-				theComment.text = req.body.text;
+		return res.status(200).json(result);
+	});
+};
+
+// controller pour voir un commentaire
+exports.getOneComment = (req, res, next) => {
+	//ORDER BY created_at DESC
+	dbConnexion.query(
+		"SELECT * FROM comment  WHERE idCOM= ?",
+		req.params.id,
+		(error, result) => {
+			if (error) {
+				return res.status(400).json({ error });
 			}
-			return docs.save((err) => {
-				if (!err) {
-					return res.status(200).send(docs);
-				} else {
-					return res.status(500).send(err);
-				}
-			});
-		});
-	} catch (err) {
-		return res.status(400).send(err);
-	}
+
+			return res.status(200).json(result);
+		},
+	);
 };
 
 // controllers pour supprimer un commentaire
-module.exports.deleteCommentPost = (req, res) => {
-	if (!objectId.isValid(req.params.id))
-		return res.status(400).send("ID unknown : " + req.params.id);
-
-	try {
-		return postModel
-			.findByIdAndUpdate(
-				req.params.id,
-				{
-					$pull: {
-						comments: {
-							_id: req.body.commentId,
-						},
-					},
-				},
-				{ new: true },
-			)
-			.then((docs) => res.send(docs))
-			.catch((err) => res.status(500).send({ message: err }));
-	} catch (err) {
-		return res.status(400).send(err);
-	}
+module.exports.deleteOneComment = (req, res) => {
+	dbConnexion.query(
+		"DELETE FROM responses WHERE idRESPONSE= ?",
+		req.body.id,
+		(error, results, fields) => {
+			if (error) {
+				return res.status(400).json(error);
+			}
+			return res
+				.status(200)
+				.json({ message: "Votre message a bien été supprimé !" });
+		},
+	);
 };

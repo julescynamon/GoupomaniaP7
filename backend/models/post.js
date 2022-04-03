@@ -1,7 +1,6 @@
 class postCreate {
-	constructor(userId, titre, message, picture, likers) {
-		(this.userId = userId),
-			(this.titre = titre),
+	constructor(titre, message, picture, likers) {
+		(this.titre = titre),
 			(this.message = message),
 			(this.picture = picture),
 			(this.likers = likers);

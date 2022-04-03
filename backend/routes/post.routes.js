@@ -5,23 +5,19 @@ const upload = multer();
 const { checkUser } = require("../middlewares/auth");
 
 router.get("/", checkUser, postController.readPost);
-router.post("/", checkUser, upload.single("file"), postController.createPost);
-router.put("/:id", checkUser, upload.single("file"), postController.updatePost);
+router.get("/:id", checkUser, postController.readOnePost);
+router.post(
+	"/",
+	checkUser,
+	upload.single("picture"),
+	postController.createPost,
+);
 router.delete("/:id", checkUser, postController.deletePost);
-router.patch("/like-post/:id", checkUser, postController.likePost);
-router.patch("/unlike-post/:id", checkUser, postController.unLikePost);
 
 // comments
-router.patch("/comment-post/:id", checkUser, postController.commentPost);
-router.patch(
-	"/edit-comment-post/:id",
-	checkUser,
-	postController.editCommentPost,
-);
-router.patch(
-	"/delete-comment-post/:id",
-	checkUser,
-	postController.deleteCommentPost,
-);
+router.get("/:id/allcomments", checkUser, postController.getAllComment);
+router.get("/:id", checkUser, postController.getOneComment);
+router.post("/:id", checkUser, postController.commentPost);
+router.delete("/:id", checkUser, postController.deleteOneComment);
 
 module.exports = router;
