@@ -145,7 +145,7 @@ exports.getOneComment = (req, res, next) => {
 // controllers pour supprimer un commentaire
 module.exports.deleteOneComment = (req, res) => {
 	dbConnexion.query(
-		"DELETE FROM responses WHERE idRESPONSE= ?",
+		"DELETE FROM comment WHERE idCOM= ?",
 		req.body.id,
 		(error, results, fields) => {
 			if (error) {
