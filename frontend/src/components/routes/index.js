@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "../../pages/Home";
-import Trending from "../../pages/Trending";
-import Profil from "../../pages/Profil";
-import PageNotFound from "../../pages/PageNotFound";
+import Home from "../../Pages/Home";
+import Trending from "../../Pages/Trending";
+import Profil from "../../Pages/Profil";
+import PageNotFound from "../../Pages/PageNotFound";
 
-export default function index() {
+export default function Index() {
 	return (
 		<Router>
 			<Switch>

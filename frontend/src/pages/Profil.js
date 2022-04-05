@@ -1,11 +1,11 @@
 import React from 'react';
-import Log from "../components/log/auth";
+import Log from "../Components/Log/Auth";
 
 export default function Profil() {
     return (
 		<div className='profil-page'>
 			<div className='log-container'>
-				<Log />
+				<Log signIn={false} signUp={true} />
 				<div className='img-container'>
 					<img
 						src='./img/icon-left-font.svg'
