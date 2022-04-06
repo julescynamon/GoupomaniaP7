@@ -34,7 +34,7 @@ export default function SigninForm() {
 	};
 
 	return (
-		<form action='' onSubmit={handleLogin} id='sign-up-form'>
+		<form onSubmit={handleLogin} id='sign-up-form'>
 			<label htmlFor='email'>Email</label>
 			<br />
 			<input
