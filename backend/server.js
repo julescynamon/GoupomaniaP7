@@ -6,11 +6,11 @@ require("dotenv").config({ path: "./config/.env" });
 require("./config/db");
 // Mise en place du package Helmet pour pour pouvoir respecter les standars de securite
 const helmet = require("helmet");
+
 // mise en place du package path pour accéder au path de notre serveur
 // const path = require("path");
 // on appel la fonction qui check le token du user;
 const { requireAuth } = require("./middlewares/auth");
-const cors = require("cors");
 const userRoutes = require("./routes/user.routes");
 const postRoutes = require("./routes/post.routes");
 
@@ -18,15 +18,19 @@ const postRoutes = require("./routes/post.routes");
 app.use(helmet());
 
 // Prévention des erreurs CORS
-const corsOptions = {
-	origin: process.env.CLIENT_URL,
-	credentials: true,
-	allowedHeaders: ["sessionId", "Content-Type"],
-	exposedHeaders: ["sessionId"],
-	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-	preflightContinue: false,
-};
-app.use(cors(corsOptions));
+app.use((req, res, next) => {
+	res.setHeader("Access-Control-Allow-Origin", `${process.env.CLIENT_URL}`);
+	res.header(
+		"Access-Control-Allow-Headers",
+		"Origin, X-Requested-With, Content-Type, Accept",
+	);
+	res.setHeader(
+		"Access-Control-Allow-Methods",
+		"GET, POST, PUT, DELETE, PATCH, OPTIONS",
+	);
+	res.setHeader("Access-Control-Allow-Credentials", "true");
+	next();
+});
 
 //intercerpte les requetes de type json et donne accès au corps de la requète remplace body-parser
 app.use(express.json());
