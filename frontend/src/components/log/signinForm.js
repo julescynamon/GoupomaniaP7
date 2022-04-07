@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function SigninForm() {
-	const [email, setEmail] = useState({email: ""});
-	const [password, setPassword] = useState({password: ""});
+	const [email, setEmail] = useState({ email: "" });
+	const [password, setPassword] = useState({ password: "" });
 
 	const handleLogin = (e) => {
 		e.preventDefault();
 		const emailError = document.querySelector(".email.error");
 		const passwordError = document.querySelector(".password.error");
-
+		// on utilise axios pour pouvoir relier notre app a notre API et faire des requètes.
 		axios({
 			method: "post",
 			url: `${process.env.REACT_APP_API_URL}api/user/login`,
@@ -19,7 +19,7 @@ export default function SigninForm() {
 				password: password,
 			},
 			config: {
-				Accept: "application/json"
+				Accept: "application/json",
 			},
 		})
 			.then((res) => {
