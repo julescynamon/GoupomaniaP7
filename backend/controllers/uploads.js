@@ -19,17 +19,19 @@ module.exports.uploadProfil = async (req, res) => {
 		const errors = uploadErrors(err);
 		return res.status(201).json({ errors });
 	}
-	const fileName = req.body.username + ".jpg";
+	const fileName = req.body.name + ".jpg";
 
 	await pipeline(
 		req.file.stream,
-		fs.createWriteStream(`/../../uploads/profils/${fileName}`),
+		fs.createWriteStream(
+			`/Users/julescynamon/Desktop/GoupomaniaP7/frontend/public/uploads/profil/${fileName}`,
+		),
 	);
 
 	try {
-		const { id: idUSER } = req.params;
+		const idUSER = req.body.idUSER;
 		dbConnexion.query(
-			`UPDATE user SET picture = "./uploads/profils/" + ${fileName} WHERE id = ${idUSER}`,
+			`UPDATE user SET picture = "./uploads/profils/" + ${fileName} WHERE IdUSER = ${idUSER}`,
 			(err, results) => {
 				if (err) {
 					res.status(404).json({ err });

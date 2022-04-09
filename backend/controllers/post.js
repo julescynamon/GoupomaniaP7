@@ -58,7 +58,9 @@ module.exports.createPost = async (req, res) => {
 
 		await pipeline(
 			req.file.stream,
-			fs.createWriteStream(`/../../uploads/profils/${fileName}`),
+			fs.createWriteStream(
+				`/Users/julescynamon/Desktop/GoupomaniaP7/frontend/public/uploads/profil/${fileName}`,
+			),
 		);
 	}
 
