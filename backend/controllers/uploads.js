@@ -31,7 +31,7 @@ module.exports.uploadProfil = async (req, res) => {
 	try {
 		const idUSER = req.body.idUSER;
 		dbConnexion.query(
-			`UPDATE user SET picture = "./uploads/profils/" + ${fileName} WHERE IdUSER = ${idUSER}`,
+			`UPDATE user SET picture = "./uploads/profils/ + ${fileName}" WHERE IdUSER = ${idUSER}`,
 			(err, results) => {
 				if (err) {
 					res.status(404).json({ err });

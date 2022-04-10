@@ -3,22 +3,6 @@ const jwt = require("jsonwebtoken");
 const dbConnexion = require("../config/db");
 require("dotenv").config({ path: "./config/.env" });
 
-module.exports.requireAuth = (req, res, next) => {
-	const token = req.cookies.jwt;
-	if (token) {
-		jwt.verify(token, process.env.JWT_TOKEN, async (err, decodedToken) => {
-			if (err) {
-				console.log(err);
-			} else {
-				console.log(decodedToken.id);
-				next();
-			}
-		});
-	} else {
-		console.log("Pas de token présent");
-	}
-};
-
 module.exports.checkUser = (req, res, next) => {
 	try {
 		if (req.cookies.jwt) {
@@ -45,5 +29,26 @@ module.exports.checkUser = (req, res, next) => {
 		res.clearCookie();
 		console.log(err);
 		res.status(401).json({ message: "Unauthorized" });
+	}
+};
+
+module.exports.requireAuth = (req, res, next) => {
+	const token = req.cookies.jwt;
+	if (token) {
+		jwt.verify(
+			token,
+			process.env.TOKEN_SECRET,
+			async (err, decodedToken) => {
+				if (err) {
+					console.log(err);
+					res.send(200).json("no token");
+				} else {
+					console.log(decodedToken.id);
+					next();
+				}
+			},
+		);
+	} else {
+		console.log("No token");
 	}
 };

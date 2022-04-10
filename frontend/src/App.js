@@ -22,7 +22,7 @@ export default function App() {
 				});
 		};
 		userToken();
-	}, []);
+	}, [uid]);
 
 	return (
 		// on utilise UidContext pour garder en memoire le token de notre utilisateur pour eviter de demander a chaque fois a l'api si l'utilisateur est autorise

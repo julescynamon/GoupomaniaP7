@@ -6,6 +6,7 @@ require("dotenv").config({ path: "./config/.env" });
 require("./config/db");
 // Mise en place du package Helmet pour pour pouvoir respecter les standars de securite
 const helmet = require("helmet");
+const cors = require("cors");
 
 // mise en place du package path pour accéder au path de notre serveur
 // const path = require("path");
@@ -18,29 +19,26 @@ const postRoutes = require("./routes/post.routes");
 app.use(helmet());
 
 // Prévention des erreurs CORS
-app.use((req, res, next) => {
-	res.setHeader("Access-Control-Allow-Origin", `${process.env.CLIENT_URL}`);
-	res.header(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept",
-	);
-	res.setHeader(
-		"Access-Control-Allow-Methods",
-		"GET, POST, PUT, DELETE, PATCH, OPTIONS",
-	);
-	res.setHeader("Access-Control-Allow-Credentials", "true");
-	next();
-});
+const corsOptions = {
+	origin: process.env.CLIENT_URL,
+	credentials: true,
+	allowedHeaders: ["sessionId", "Content-Type"],
+	exposedHeaders: ["sessionId"],
+	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+	preflightContinue: false,
+};
+app.use(cors(corsOptions));
 
 //intercerpte les requetes de type json et donne accès au corps de la requète remplace body-parser
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // utilistation de cookie-parser pour pouvoir utiliser nos cookies
 app.use(cookieParser());
 
 // verification lors de l'arrive du client sur notre site si il a un token si oui on le connect direct sans demander son email et mot de passe
 app.get("/jwtid", requireAuth, (req, res) => {
-	res.status(200).send(res.locals.userId);
+	res.status(200).send(res.locals.user.userId);
 });
 
 // Nous devons autoriser express à servir les fichiers publics afin de pouvoir diffuser les images téléchargées.

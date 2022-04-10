@@ -22,9 +22,10 @@ module.exports.getOneUser = async (req, res) => {
 			if (err) {
 				res.status(404).json({ err });
 				throw err;
+			} else {
+				delete results[0].password;
+				res.status(200).json(results);
 			}
-			delete results[0].password;
-			res.status(200).json(results);
 		},
 	);
 };
