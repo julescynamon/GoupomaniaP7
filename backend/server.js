@@ -37,9 +37,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // verification lors de l'arrive du client sur notre site si il a un token si oui on le connect direct sans demander son email et mot de passe
-app.get("/jwtid", requireAuth, (req, res) => {
-	res.status(200).send(res.locals.user.userId);
-});
+// app.get("/jwtid", requireAuth, (req, res) => {
+// 	res.status(200).send(res.locals.user.userId);
+// });
 
 // Nous devons autoriser express à servir les fichiers publics afin de pouvoir diffuser les images téléchargées.
 // app.use(
