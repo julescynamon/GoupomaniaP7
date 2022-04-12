@@ -17,7 +17,8 @@ module.exports.checkUser = (req, res, next) => {
 				if (err) {
 					res.status(204).json(err);
 				} else {
-					console.log(results);
+					res.locals.user = decodedToken.userId;
+					console.log(res.locals.user);
 					next();
 				}
 			});
@@ -32,23 +33,11 @@ module.exports.checkUser = (req, res, next) => {
 	}
 };
 
-// module.exports.requireAuth = (req, res, next) => {
-// 	const token = req.cookies.jwt;
-// 	if (token) {
-// 		jwt.verify(
-// 			token,
-// 			process.env.TOKEN_SECRET,
-// 			async (err, decodedToken) => {
-// 				if (err) {
-// 					console.log(err);
-// 					res.send(200).json("no token");
-// 				} else {
-// 					console.log(decodedToken.id);
-// 					next();
-// 				}
-// 			},
-// 		);
-// 	} else {
-// 		console.log("No token");
-// 	}
-// };
+module.exports.requireAuth = (req, res, next) => {
+	const token = req.cookies.jwt;
+	if (token) {
+		const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
+	} else {
+		console.log("No token");
+	}
+};

@@ -5,10 +5,12 @@ import Trending from "../../Pages/Trending";
 import Login from "../../Pages/Login";
 import Profil from "../../Pages/Profil";
 import PageNotFound from "../../Pages/PageNotFound";
+import NavBarr from "../NavBarr";
 
 export default function Index() {
 	return (
 		<Router>
+			<NavBarr />
 			<Switch>
 				<Route exact path='/' component={Login} />
 				<Route exact path='/home' component={Home} />

@@ -11,7 +11,7 @@ const cors = require("cors");
 // mise en place du package path pour accéder au path de notre serveur
 // const path = require("path");
 // on appel la fonction qui check le token du user;
-const { requireAuth } = require("./middlewares/auth");
+const { requireAuth, checkUser } = require("./middlewares/auth");
 const userRoutes = require("./routes/user.routes");
 const postRoutes = require("./routes/post.routes");
 
@@ -36,16 +36,12 @@ app.use(express.urlencoded({ extended: true }));
 // utilistation de cookie-parser pour pouvoir utiliser nos cookies
 app.use(cookieParser());
 
+// Verifications du token valide de notre utilisateur
+app.get("*", checkUser);
 // verification lors de l'arrive du client sur notre site si il a un token si oui on le connect direct sans demander son email et mot de passe
-// app.get("/jwtid", requireAuth, (req, res) => {
-// 	res.status(200).send(res.locals.user.userId);
-// });
-
-// Nous devons autoriser express à servir les fichiers publics afin de pouvoir diffuser les images téléchargées.
-// app.use(
-// 	"../../frontend/public/uploads",
-// 	express.static(path.join(__dirname, "../../frontend/public/uploads")),
-// );
+app.get("/jwtid", requireAuth, (req, res) => {
+	res.status(200).send(res.locals.user.userId);
+});
 
 // Routes
 app.use("/api/user", userRoutes);

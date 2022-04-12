@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function SigninForm() {
-	const [email, setEmail] = useState({ email: "" });
-	const [password, setPassword] = useState({ password: "" });
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 
 	const handleLogin = (e) => {
 		e.preventDefault();
@@ -28,7 +28,7 @@ export default function SigninForm() {
 					emailError.innerHTML = res.data.errors.email;
 					passwordError.innerHTML = res.data.errors.password;
 				} else {
-					window.location = "/";
+					window.location = "/home";
 				}
 			})
 			.catch((err) => {
@@ -46,6 +46,7 @@ export default function SigninForm() {
 				id='email'
 				onChange={(e) => setEmail(e.target.value)}
 				placeholder='entrez votre email'
+				value={email}
 			/>
 			<div className='email error'></div>
 			<br />
@@ -57,6 +58,7 @@ export default function SigninForm() {
 				id='password'
 				onChange={(e) => setPassword(e.target.value)}
 				placeholder='entrez votre mot de passe'
+				value={password}
 			/>
 			<div className='password error'></div>
 			<br />

@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
+import SignInForm from "./SigninForm";
 
 export default function SignupForm() {
-	const [username, setUsername] = useState({ username: "" });
-	const [email, setEmail] = useState({ email: "" });
-	const [password, setPassword] = useState({ password: "" });
-	const [controlPassword, setControlPassword] = useState({
-		controlPassword: "",
-	});
+	const [username, setUsername] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [controlPassword, setControlPassword] = useState("");
+	const [formSubmit, setFormSubmit] = useState(false);
 
 	const handleRegister = async (e) => {
 		e.preventDefault();
-		const terms = document.getElementById(".terms");
+		const terms = document.getElementById("terms");
 		const usernameError = document.querySelector(".pseudo.error");
 		const emailError = document.querySelector(".email.error");
 		const passwordError = document.querySelector(".password.error");
@@ -20,16 +20,16 @@ export default function SignupForm() {
 		);
 		const termsError = document.querySelector(".terms.error");
 
-		passwordConfError.current.innerText = "";
-		termsError.current.innerText = "";
+		passwordConfError.innerHTML = "";
+		termsError.innerHTML = "";
 
 		if (password !== controlPassword || !terms.checked) {
 			if (password !== controlPassword) {
-				passwordConfError.current.innerText =
+				passwordConfError.innerHTML =
 					"Les mots de passes ne correspondent pas";
 			}
 			if (!terms.checked) {
-				termsError.current.innerText =
+				termsError.innerHTML =
 					"Veuillez cochez les conditions générales";
 			}
 		} else {
@@ -49,13 +49,11 @@ export default function SignupForm() {
 				.then((res) => {
 					console.log(res);
 					if (res.data.errors) {
-						usernameError.current.innerText =
-							res.data.errors.username;
-						emailError.current.innerText = res.data.errors.email;
-						passwordError.current.innerText =
-							res.data.errors.password;
+						usernameError.innerHTML = res.data.errors.username;
+						emailError.innerHTML = res.data.errors.email;
+						passwordError.innerHTML = res.data.errors.password;
 					} else {
-						window.location = "/";
+						setFormSubmit(true);
 					}
 				})
 				.catch((err) => {
@@ -65,70 +63,87 @@ export default function SignupForm() {
 	};
 
 	return (
-		<form action='' onSubmit={handleRegister} id='sign-up-fom'>
-			<label htmlFor='username'>Pseudo</label>
-			<br />
-			<input
-				type='text'
-				name='username'
-				id='username'
-				onChange={(e) => {
-					setUsername(e.target.value);
-				}}
-				placeholder='entrez votre pseudo'
-			/>
-			<div className='username error'></div>
-			<br />
-			<label htmlFor='email'>Email</label>
-			<br />
-			<input
-				type='email'
-				name='email'
-				id='email'
-				onChange={(e) => {
-					setEmail(e.target.value);
-				}}
-				placeholder='entrez votre email'
-			/>
-			<div className='email error'></div>
-			<br />
-			<label htmlFor='password'>Mot de passe</label>
-			<br />
-			<input
-				type='password'
-				name='password'
-				id='password'
-				onChange={(e) => {
-					setPassword(e.target.value);
-				}}
-				placeholder='entrez votre mot de passe'
-			/>
-			<div className='password error'></div>
-			<br />
-			<label htmlFor='password-conf'>Confirmer le mot de passe</label>
-			<br />
-			<input
-				type='password'
-				name='password'
-				id='password-conf'
-				onChange={(e) => {
-					setControlPassword(e.target.value);
-				}}
-				placeholder='confirmez mot de passe'
-				va
-			/>
-			<div className='password-confirm error'></div>
-			<br />
-			<input type='checkbox' id='terms' />
-			<label htmlFor='terms'>
-				J'accepte les{" "}
-				<a href='/' target='_blank' rel='noopener noreferrer'>
-					conditions générales
-				</a>
-			</label>
-			<div className='terms error'></div>
-			<br />
-			<input type='submit' value='Valider inscription' />
-		</form>
+		<>
+			{formSubmit ? (
+				<>
+					<SignInForm />
+					<span></span>
+					<h4 className='success'>
+						Enregistrement réussi, veuillez-vous connecter
+					</h4>
+				</>
+			) : (
+				<form action='' onSubmit={handleRegister} id='sign-up-fom'>
+					<label htmlFor='username'>Pseudo</label>
+					<br />
+					<input
+						type='text'
+						name='username'
+						id='username'
+						onChange={(e) => {
+							setUsername(e.target.value);
+						}}
+						value={username}
+						placeholder='entrez votre pseudo'
+					/>
+					<div className='username error'></div>
+					<br />
+					<label htmlFor='email'>Email</label>
+					<br />
+					<input
+						type='email'
+						name='email'
+						id='email'
+						onChange={(e) => {
+							setEmail(e.target.value);
+						}}
+						placeholder='entrez votre email'
+						value={email}
+					/>
+					<div className='email error'></div>
+					<br />
+					<label htmlFor='password'>Mot de passe</label>
+					<br />
+					<input
+						type='password'
+						name='password'
+						id='password'
+						onChange={(e) => {
+							setPassword(e.target.value);
+						}}
+						placeholder='entrez votre mot de passe'
+						value={password}
+					/>
+					<div className='password error'></div>
+					<br />
+					<label htmlFor='password-conf'>
+						Confirmer le mot de passe
+					</label>
+					<br />
+					<input
+						type='password'
+						name='password'
+						id='password-conf'
+						onChange={(e) => {
+							setControlPassword(e.target.value);
+						}}
+						placeholder='confirmez mot de passe'
+						value={controlPassword}
+					/>
+					<div className='password-confirm error'></div>
+					<br />
+					<input type='checkbox' id='terms' />
+					<label htmlFor='terms'>
+						J'accepte les{" "}
+						<a href='/' target='_blank' rel='noopener noreferrer'>
+							conditions générales
+						</a>
+					</label>
+					<div className='terms error'></div>
+					<br />
+					<input type='submit' value='Valider inscription' />
+				</form>
+			)}
+		</>
 	);
 }
