@@ -17,7 +17,7 @@ module.exports.checkUser = (req, res, next) => {
 				if (err) {
 					res.status(204).json(err);
 				} else {
-					res.locals.user = decodedToken.userId;
+					res.locals.user = userId;
 					console.log(res.locals.user);
 					next();
 				}
@@ -32,11 +32,18 @@ module.exports.checkUser = (req, res, next) => {
 		res.status(401).json({ message: "Unauthorized" });
 	}
 };
-
 module.exports.requireAuth = (req, res, next) => {
 	const token = req.cookies.jwt;
 	if (token) {
-		const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
+		jwt.verify(token, process.env.JWT_TOKEN, async (err, decodedToken) => {
+			if (err) {
+				console.log(err);
+				res.send(200).json("no token");
+			} else {
+				console.log(decodedToken);
+				next();
+			}
+		});
 	} else {
 		console.log("No token");
 	}

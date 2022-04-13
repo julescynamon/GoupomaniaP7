@@ -11,7 +11,6 @@ const limitConnect = require("../middlewares/connectParams");
 // import du controller du user
 const userAuth = require("../controllers/auth");
 const userControlls = require("../controllers/user");
-const { checkUser } = require("../middlewares/auth");
 const uploadController = require("../controllers/uploads");
 const multer = require("multer");
 const upload = multer();
