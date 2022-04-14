@@ -12,7 +12,7 @@ module.exports.checkUser = (req, res, next) => {
 			const { userId: userId } = decodedToken;
 			console.log(userId);
 
-			const sql = `SELECT idUSER FROM user WHERE idUSER=${userId}`;
+			const sql = `SELECT * FROM user WHERE idUSER=${userId}`;
 			dbConnexion.query(sql, (err, results) => {
 				if (err) {
 					res.status(204).json(err);
@@ -40,7 +40,7 @@ module.exports.requireAuth = (req, res, next) => {
 				console.log(err);
 				res.send(200).json("no token");
 			} else {
-				console.log(decodedToken);
+				console.log(decodedToken.userId);
 				next();
 			}
 		});

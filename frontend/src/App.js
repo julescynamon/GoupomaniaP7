@@ -17,13 +17,16 @@ export default function App() {
 				withCredentials: true,
 			})
 				.then((res) => {
-					setUid(res.data);
+					setUid(res.data.id);
+					console.log(res.data.id);
 				})
 				.catch((err) => console.log("No token"));
 		};
 		fetchToken();
 
-		if (uid) dispatch(getUser(uid));
+		if (uid) {
+			dispatch(getUser(uid));
+		}
 	}, [uid, dispatch]);
 
 	return (
