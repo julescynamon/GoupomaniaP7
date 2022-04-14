@@ -17,7 +17,7 @@ module.exports.checkUser = (req, res, next) => {
 				if (err) {
 					res.status(204).json(err);
 				} else {
-					res.locals.user = userId;
+					res.locals.user = decodedToken.userId;
 					console.log(res.locals.user);
 					next();
 				}
