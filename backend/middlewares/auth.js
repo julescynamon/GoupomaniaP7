@@ -16,6 +16,7 @@ module.exports.checkUser = (req, res, next) => {
 			dbConnexion.query(sql, (err, results) => {
 				if (err) {
 					res.status(204).json(err);
+					next();
 				} else {
 					res.locals.user = decodedToken.userId;
 					console.log(res.locals.user);
@@ -23,13 +24,13 @@ module.exports.checkUser = (req, res, next) => {
 				}
 			});
 		} else {
-			res.clearCookie();
 			res.status(401).json({ message: "Unauthorized" });
+			next();
 		}
 	} catch (err) {
-		res.clearCookie();
 		console.log(err);
 		res.status(401).json({ message: "Unauthorized" });
+		next();
 	}
 };
 module.exports.requireAuth = (req, res, next) => {

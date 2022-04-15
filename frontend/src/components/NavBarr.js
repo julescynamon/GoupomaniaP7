@@ -6,7 +6,7 @@ import Logout from "./Log/Logout";
 
 export default function NavBarr() {
 	const uid = useContext(UidContext);
-	const userData = useSelector((state) => state.userReducer[0]);
+	const userData = useSelector((state) => state.userReducer);
 
 	return (
 		<nav>
