@@ -20,7 +20,7 @@ export const getUser = (uid) => {
 	};
 };
 
-export const uploadPicture = (data, id) => {
+export const uploadPicture = (data, IdUSER) => {
 	return (dispatch) => {
 		return axios({
 			method: "post",
@@ -34,7 +34,7 @@ export const uploadPicture = (data, id) => {
 			.then((res) => {
 				return axios({
 					method: "get",
-					url: `${process.env.REACT_APP_API_URL}api/user/${id}`,
+					url: `${process.env.REACT_APP_API_URL}api/user/${IdUSER}`,
 					withCredentials: true,
 					config: {
 						Accept: "application/json",

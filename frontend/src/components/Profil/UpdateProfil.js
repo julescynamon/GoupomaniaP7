@@ -5,6 +5,7 @@ import UploadImg from "./UploadImg";
 
 export default function UpdateProfil() {
 	const userData = useSelector((state) => state.userReducer);
+	console.log(userData);
 	return (
 		<div className='profil-container'>
 			<NavBarrLeft />
