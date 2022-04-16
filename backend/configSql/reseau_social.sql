@@ -53,13 +53,7 @@ CREATE TABLE `user` (
   `isadmin` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `user`
---
 
-INSERT INTO `user` (`IdUSER`, `username`, `email`, `password`, `bio`, `picture`, `isadmin`) VALUES
-(1, 'titiNaima', 'naima@hotmail.com', '$2b$10$pCkP4lCU3aI.nCbKVKRVVezkBHXs2mLXOej52/50G6mo.Lljn902q', NULL, NULL, 0),
-(2, 'julesCynamon', 'julescynamon@hotmail.com', '$2b$10$XHBC0j6PcJB0.2TkYRNKKehtYgNni9DtrNHiYbalBojJ760kvzHv.', NULL, NULL, 0);
 
 --
 -- Index pour les tables déchargées

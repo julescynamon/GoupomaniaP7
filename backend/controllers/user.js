@@ -24,7 +24,7 @@ module.exports.getOneUser = async (req, res) => {
 				throw err;
 			} else {
 				delete results[0].password;
-				res.status(200).json(results);
+				res.status(200).json(results[0]);
 			}
 		},
 	);

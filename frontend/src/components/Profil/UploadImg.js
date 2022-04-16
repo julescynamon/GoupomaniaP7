@@ -11,10 +11,10 @@ export default function UploadImg() {
 		e.preventDefault();
 		const data = new FormData();
 		data.append("name", userData.username);
-		data.append("idUSER", userData.idUSER);
+		data.append("idUSER", userData.IdUSER);
 		data.append("file", file);
 
-		dispatch(uploadPicture(data, userData.idUSER));
+		dispatch(uploadPicture(data, userData.IdUSER));
 	};
 
 	return (

@@ -24,14 +24,14 @@ module.exports.uploadProfil = async (req, res) => {
 	await pipeline(
 		req.file.stream,
 		fs.createWriteStream(
-			`/Users/julescynamon/Desktop/GoupomaniaP7/frontend/public/uploads/profil/${fileName}`,
+			`${process.env.UPLOAD_PATH}/uploads/profil/${fileName}`,
 		),
 	);
 
 	try {
 		const idUSER = req.body.idUSER;
 		dbConnexion.query(
-			`UPDATE user SET picture = "./public/uploads/profil/ + ${fileName}" WHERE IdUSER = ${idUSER}`,
+			`UPDATE user SET picture = "uploads/profil/${fileName}" WHERE IdUSER = ${idUSER}`,
 			(err, results) => {
 				if (err) {
 					res.status(404).json({ err });

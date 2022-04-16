@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 // importation de la connexion mysql
 const dbConnexion = require("../config/db");
-require("dotenv").config({ path: "./config/.env" });
 
 module.exports.checkUser = (req, res, next) => {
 	try {

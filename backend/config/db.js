@@ -3,7 +3,7 @@ require("dotenv").config({ path: "./.env" });
 
 // parametre de connexion a la base de donnees
 const dbConnect = db.createConnection({
-	hoste: "localhost",
+	host: "localhost",
 	user: "root",
 	password: "",
 	database: "reseau_social",

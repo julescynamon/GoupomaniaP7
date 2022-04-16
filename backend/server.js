@@ -2,7 +2,6 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 // Lancement de Express
 const app = express();
-require("dotenv").config({ path: "./config/.env" });
 require("./config/db");
 // Mise en place du package Helmet pour pour pouvoir respecter les standars de securite
 const helmet = require("helmet");
