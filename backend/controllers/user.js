@@ -31,13 +31,12 @@ module.exports.getOneUser = async (req, res) => {
 };
 
 exports.updateOneUser = (req, res, next) => {
-	const { username, bio } = req.body;
-	console.log(username);
+	const { bio } = req.body;
 	console.log(bio);
 	const { id: userId } = req.params;
 	console.log(userId);
 	dbConnexion.query(
-		`UPDATE user SET username = "${username}", bio = "${bio}" WHERE user.idUSER = ${userId};`,
+		`UPDATE user SET bio = "${bio}" WHERE user.idUSER = ${userId};`,
 		(err, result) => {
 			if (err) {
 				res.status(404).json({ err });

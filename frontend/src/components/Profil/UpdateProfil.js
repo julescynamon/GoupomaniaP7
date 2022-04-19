@@ -10,7 +10,7 @@ export default function UpdateProfil() {
 	const [bio, setBio] = useState("");
 	const [updateForm, setUpdateForm] = useState(false);
 	const handleUpdate = () => {
-		dispatch(updateBio(userData._id, bio));
+		dispatch(updateBio(userData.IdUSER, bio));
 		setUpdateForm(false);
 	};
 

@@ -53,7 +53,7 @@ export const updateBio = (IdUSER, bio) => {
 	return (dispatch) => {
 		return axios({
 			method: "put",
-			url: `${process.env.REACT_APP_API_URL}api/user/` + IdUSER,
+			url: `${process.env.REACT_APP_API_URL}api/user/${IdUSER}`,
 			data: { bio },
 		})
 			.then((res) => {

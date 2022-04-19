@@ -1,9 +1,14 @@
-import React from 'react';
+import React from "react";
+import NavBarrLeft from "../Components/NavBarrLeft";
+import PostFil from "../Components/PostFil";
 
 export default function Home() {
-    return (
-		<div>
-			<h1>Bonjour tout le monde</h1>
+	return (
+		<div className='home'>
+			<NavBarrLeft />
+			<div className='main'>
+				<PostFil />
+			</div>
 		</div>
 	);
 }
