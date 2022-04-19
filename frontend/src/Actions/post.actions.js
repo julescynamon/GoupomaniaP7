@@ -2,16 +2,15 @@ import axios from "axios";
 
 export const GET_POST = "GET_POST";
 
-export const getPost = () => {
+export const getPosts = () => {
 	return (dispatch) => {
 		return axios({
 			method: "get",
-			url: `${process.env.REACT_APP_API_URL}api/post`,
-			withCredentials: true,
+			url: `${process.env.REACT_APP_API_URL}api/post/`,
 		})
 			.then((res) => {
 				dispatch({
-					type: "GET_POST",
+					type: GET_POST,
 					payload: res.data,
 				});
 			})

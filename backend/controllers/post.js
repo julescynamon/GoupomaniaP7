@@ -17,6 +17,7 @@ module.exports.readPost = (req, res) => {
 				throw err;
 			}
 			res.status(200).json(result);
+			console.log(result);
 		},
 	);
 };
@@ -149,7 +150,7 @@ module.exports.deleteOneComment = (req, res) => {
 	dbConnexion.query(
 		"DELETE FROM comment WHERE idCOM= ?",
 		req.body.id,
-		(error, results, fields) => {
+		(error, results) => {
 			if (error) {
 				return res.status(400).json(error);
 			}
