@@ -10,7 +10,7 @@ export default function PostFil() {
 			dispatch(getPost());
 			setPost(false);
 		}
-	}, [post, setPost, dispatch]);
+	}, [post, dispatch]);
 
 	return <div>fil</div>;
 }
