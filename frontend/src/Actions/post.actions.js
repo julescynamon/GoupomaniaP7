@@ -7,6 +7,10 @@ export const getPosts = () => {
 		return axios({
 			method: "get",
 			url: `${process.env.REACT_APP_API_URL}api/post/`,
+			withCredentials: true,
+			config: {
+				Accept: "application/json",
+			},
 		})
 			.then((res) => {
 				dispatch({
