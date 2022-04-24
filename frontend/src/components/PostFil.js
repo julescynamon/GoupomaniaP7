@@ -6,14 +6,30 @@ import { isEmpty } from "./Utils";
 
 export default function PostFil() {
 	const [loadPost, setLoadPost] = useState(true);
+	const [count, setCount] = useState(5);
 	const dispatch = useDispatch();
 	const posts = useSelector((state) => state.postReducer);
 	useEffect(() => {
 		if (loadPost) {
-			dispatch(getPosts());
+			dispatch(getPosts(count));
 			setLoadPost(false);
+			setCount(count + 5);
 		}
-	}, [loadPost, dispatch]);
+
+		const loadMore = () => {
+			if (
+				window.innerHeight + document.documentElement.scrollTop + 1 >
+				document.scrollingElement.scrollHeight
+			) {
+				setLoadPost(true);
+			}
+		};
+
+		window.addEventListener("scroll", loadMore);
+		return () => {
+			window.removeEventListener("scroll", loadMore);
+		};
+	}, [loadPost, dispatch, count]);
 
 	return (
 		<div>

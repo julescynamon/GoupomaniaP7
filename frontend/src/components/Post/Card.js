@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { dateParser, isEmpty } from "../Utils";
+import CardComments from "./CardComments";
+import Delete from "./Delete";
 
 export default function Card({ post }) {
 	const [isLoading, setIsLoading] = useState(true);
+	const [showComments, setShowComments] = useState(false);
 	const usersData = useSelector((state) => state.usersReducer);
 	const userData = useSelector((state) => state.userReducer);
+	const commentData = useSelector((state) => state.commentReducer);
 
 	useEffect(() => {
 		!isEmpty(usersData[0]) && setIsLoading(false);
@@ -25,6 +29,8 @@ export default function Card({ post }) {
 									.map((user) => {
 										if (user.idUSER === post.userId) {
 											return user.picture;
+										} else {
+											return null;
 										}
 									})
 									.join("")
@@ -43,6 +49,8 @@ export default function Card({ post }) {
 													user.idUSER === post.userId
 												) {
 													return user.username;
+												} else {
+													return null;
 												}
 											})
 											.join("")}
@@ -58,11 +66,31 @@ export default function Card({ post }) {
 								className='card-pic'
 							/>
 						)}
+						{userData.IdUSER === post.userId && (
+							<div className='button-container'>
+								<Delete id={post.idPOST} />
+							</div>
+						)}
 						<div className='card-footer'>
 							<div className='comment-icon'>
-								<img src='./img/icons/message1.svg' alt='' />
+								<img
+									onClick={() => {
+										setShowComments(!showComments);
+									}}
+									src='./img/icons/message1.svg'
+									alt=''
+								/>
+								<span>
+									{!isEmpty(commentData[0]) &&
+										commentData.map((comment) => {
+											return comment.length;
+										})}
+								</span>
 							</div>
+							<h6>Like icons</h6>
+							<img src='./img/icons/share.svg' alt='share' />
 						</div>
+						{showComments && <CardComments post={post} />}
 					</div>
 				</>
 			)}
