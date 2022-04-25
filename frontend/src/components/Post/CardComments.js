@@ -5,7 +5,7 @@ import { getComments, postComments } from "../../Actions/comment.actions";
 import { getPosts } from "../../Actions/post.actions";
 import DelComment from "./DelComment";
 
-export default function CardComments() {
+export default function CardComments({ post }) {
 	const [text, setText] = useState("");
 	const [loadComments, setLoadComments] = useState(true);
 	const usersData = useSelector((state) => state.usersReducer);
@@ -16,10 +16,10 @@ export default function CardComments() {
 
 	useEffect(() => {
 		if (loadComments) {
-			dispatch(getComments());
+			dispatch(getComments({ post }));
 			setLoadComments(false);
 		}
-	}, [loadComments, dispatch]);
+	}, [loadComments, dispatch, post]);
 
 	const handleComment = (e) => {
 		e.preventDefault();

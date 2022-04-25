@@ -8,7 +8,7 @@ export const getComments = (idPOST) => {
 	return (dispatch) => {
 		return axios({
 			method: "get",
-			url: `${process.env.REACT_APP_API_URL}api/comment/${idPOST}/allcomments`,
+			url: `${process.env.REACT_APP_API_URL}api/post/${idPOST}/allcomments`,
 			withCredentials: true,
 			config: {
 				Accept: "application/json",

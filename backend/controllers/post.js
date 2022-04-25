@@ -123,6 +123,7 @@ module.exports.commentPost = (req, res) => {
 // controller pour voir tous les commentaires
 exports.getAllComment = (req, res, next) => {
 	const idPOST = req.params.id;
+	console.log(idPOST);
 	dbConnexion.query(
 		`SELECT * FROM comment WHERE comment.idPublication = ${idPOST}`,
 		(error, result) => {
