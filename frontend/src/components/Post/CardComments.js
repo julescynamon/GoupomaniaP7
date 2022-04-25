@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty, timestampParser } from "../Utils";
-import { getComments } from "../../Actions/comment.actions";
+import { getComments, postComments } from "../../Actions/comment.actions";
+import { getPosts } from "../../Actions/post.actions";
+import DelComment from "./DelComment";
 
 export default function CardComments() {
 	const [text, setText] = useState("");
 	const [loadComments, setLoadComments] = useState(true);
 	const usersData = useSelector((state) => state.usersReducer);
 	const userData = useSelector((state) => state.userReducer);
+	const posts = useSelector((state) => state.postReducer);
 	const commentData = useSelector((state) => state.commentReducer);
 	const dispatch = useDispatch();
 
@@ -22,6 +25,20 @@ export default function CardComments() {
 		e.preventDefault();
 
 		if (text) {
+			dispatch(
+				postComments(
+					posts.idPOST,
+					userData.IdUSER,
+					commentData.message,
+					userData.username,
+				),
+			)
+				.then(() => {
+					dispatch(getPosts());
+				})
+				.then(() => {
+					setText("");
+				});
 		}
 	};
 
@@ -67,6 +84,10 @@ export default function CardComments() {
 										</span>
 									</div>
 									<p>{comment.message}</p>
+									<DelComment
+										comment={comment}
+										idPOST={posts.idPOST}
+									/>
 								</div>
 							</div>
 						</div>

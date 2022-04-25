@@ -2,12 +2,13 @@ import axios from "axios";
 
 export const GET_COMMENT = "GET_COMMENT";
 export const POST_COMMENT = "POST_COMMENT";
+export const DELETE_COMMENT = "DELETE_COMMENT";
 
 export const getComments = (idPOST) => {
 	return (dispatch) => {
 		return axios({
 			method: "get",
-			url: `${process.env.REACT_APP_API_URL}api/post/${idPOST}/allcomments`,
+			url: `${process.env.REACT_APP_API_URL}api/comment/${idPOST}/allcomments`,
 			withCredentials: true,
 			config: {
 				Accept: "application/json",
@@ -29,7 +30,7 @@ export const postComments = (idPOST, idUSER, message) => {
 	return (dispatch) => {
 		return axios({
 			method: "post",
-			url: `${process.env.REACT_APP_API_URL}api/post/${idPOST}`,
+			url: `${process.env.REACT_APP_API_URL}api/comment/${idPOST}`,
 			withCredentials: true,
 			config: {
 				Accept: "application/json",
@@ -42,7 +43,32 @@ export const postComments = (idPOST, idUSER, message) => {
 			.then((res) => {
 				dispatch({
 					type: POST_COMMENT,
-					payload: res.data,
+					payload: { idPOST },
+				});
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+};
+
+export const deleteComment = (idPOST, idCOM) => {
+	return (dispatch) => {
+		return axios({
+			method: "delete",
+			url: `${process.env.REACT_APP_API_URL}api/comment/${idCOM}`,
+			withCredentials: true,
+			config: {
+				Accept: "application/json",
+			},
+			data: {
+				idCOM: idCOM,
+			},
+		})
+			.then((res) => {
+				dispatch({
+					type: POST_COMMENT,
+					payload: { idPOST },
 				});
 			})
 			.catch((err) => {

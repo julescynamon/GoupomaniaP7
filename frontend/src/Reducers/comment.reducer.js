@@ -1,4 +1,8 @@
-import { GET_COMMENT, POST_COMMENT } from "../Actions/comment.actions";
+import {
+	DELETE_COMMENT,
+	GET_COMMENT,
+	POST_COMMENT,
+} from "../Actions/comment.actions";
 
 const initialState = {};
 
@@ -8,7 +12,7 @@ export default function commentReducer(state = initialState, action) {
 			return action.payload;
 		case POST_COMMENT:
 			return state.map((comment) => {
-				if (comment.idPOST === action.payload.idPOST) {
+				if (comment.idPublication === action.payload.idPublication) {
 					return {
 						...comment,
 						comment: comment.map((comment) => {
@@ -22,6 +26,12 @@ export default function commentReducer(state = initialState, action) {
 							}
 						}),
 					};
+				} else return comment;
+			});
+		case DELETE_COMMENT:
+			return state.map((comment) => {
+				if (comment.idPublication === action.payload.idPublication) {
+					return state;
 				} else return comment;
 			});
 		default:

@@ -106,6 +106,7 @@ module.exports.commentPost = (req, res) => {
 	const body = {
 		idCreateur: req.body.idCreateur,
 		idPublication: req.body.idPublication,
+		commentPseudo: req.body.commentPseudo,
 		message: req.body.message,
 	};
 	console.log(body);
@@ -121,13 +122,17 @@ module.exports.commentPost = (req, res) => {
 
 // controller pour voir tous les commentaires
 exports.getAllComment = (req, res, next) => {
-	dbConnexion.query("SELECT * FROM comment", (error, result) => {
-		if (error) {
-			return res.status(400).json(error);
-		}
+	const idPOST = req.params.id;
+	dbConnexion.query(
+		`SELECT * FROM comment WHERE comment.idPublication = ${idPOST}`,
+		(error, result) => {
+			if (error) {
+				return res.status(400).json(error);
+			}
 
-		return res.status(200).json(result);
-	});
+			return res.status(200).json(result);
+		},
+	);
 };
 
 // controller pour voir un commentaire
@@ -149,7 +154,7 @@ exports.getOneComment = (req, res, next) => {
 module.exports.deleteOneComment = (req, res) => {
 	dbConnexion.query(
 		"DELETE FROM comment WHERE idCOM= ?",
-		req.body.id,
+		req.params.id,
 		(error, results) => {
 			if (error) {
 				return res.status(400).json(error);
