@@ -26,17 +26,19 @@ export const getComments = (idPOST) => {
 	};
 };
 
-export const postComments = (idPOST, idUSER, message) => {
+export const postComments = (idPOST, idUSER, username, message) => {
 	return (dispatch) => {
 		return axios({
 			method: "post",
-			url: `${process.env.REACT_APP_API_URL}api/comment/${idPOST}`,
+			url: `${process.env.REACT_APP_API_URL}api/post/${idPOST}`,
 			withCredentials: true,
 			config: {
 				Accept: "application/json",
 			},
 			data: {
 				idCreateur: idUSER,
+				idPublication: idPOST,
+				commentPseudo: username,
 				message: message,
 			},
 		})
@@ -56,7 +58,7 @@ export const deleteComment = (idPOST, idCOM) => {
 	return (dispatch) => {
 		return axios({
 			method: "delete",
-			url: `${process.env.REACT_APP_API_URL}api/comment/${idCOM}`,
+			url: `${process.env.REACT_APP_API_URL}api/deleteCom/${idCOM}`,
 			withCredentials: true,
 			config: {
 				Accept: "application/json",

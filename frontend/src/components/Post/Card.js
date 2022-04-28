@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { dateParser, isEmpty } from "../Utils";
 import CardComments from "./CardComments";
+
 import Delete from "./Delete";
 
 export default function Card({ post }) {
 	const [isLoading, setIsLoading] = useState(true);
 	const [showComments, setShowComments] = useState(false);
+
 	const usersData = useSelector((state) => state.usersReducer);
 	const userData = useSelector((state) => state.userReducer);
 	const commentData = useSelector((state) => state.commentReducer);
+	const idPOST = post.idPOST;
 
 	useEffect(() => {
 		!isEmpty(usersData[0]) && setIsLoading(false);
@@ -68,7 +71,7 @@ export default function Card({ post }) {
 						)}
 						{userData.IdUSER === post.userId && (
 							<div className='button-container'>
-								<Delete id={post.idPOST} />
+								<Delete id={idPOST} />
 							</div>
 						)}
 						<div className='card-footer'>
@@ -87,7 +90,9 @@ export default function Card({ post }) {
 										})}
 								</span>
 							</div>
-							<h6>Like icons</h6>
+							<div>
+								<img src='./img/icons/heart.svg' alt='' />
+							</div>
 							<img src='./img/icons/share.svg' alt='share' />
 						</div>
 						{showComments && <CardComments post={post} />}

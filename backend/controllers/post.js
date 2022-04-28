@@ -39,9 +39,8 @@ exports.readOnePost = (req, res) => {
 
 // controllers pour creer un post
 module.exports.createPost = async (req, res) => {
-	let fileName;
-
 	if (req.file !== null) {
+		let fileName;
 		try {
 			if (
 				req.file.detectedMimeType != "image/jpg" &&
@@ -55,19 +54,26 @@ module.exports.createPost = async (req, res) => {
 			const errors = uploadErrors(err);
 			return res.status(201).json({ errors });
 		}
-		fileName = req.body.userId + Date.now() + ".jpg";
+
+		fileName = req.body.file;
 
 		await pipeline(
 			req.file.stream,
 			fs.createWriteStream(
-				`/Users/julescynamon/Desktop/GoupomaniaP7/frontend/public/uploads/profil/${fileName}`,
+				`/Users/julescynamon/Desktop/GoupomaniaP7/frontend/public/uploads/posts/${fileName}`,
 			),
 		);
 	}
 
 	let { body, file } = req;
+
 	if (!file) delete req.body.picture;
-	body = req.body;
+
+	body = {
+		...body,
+		picture: req.body.file,
+	};
+	console.log(body);
 
 	try {
 		dbConnexion.query("INSERT INTO post SET ?", body, (err, results) => {
@@ -86,7 +92,7 @@ module.exports.createPost = async (req, res) => {
 // controllers pour supprimer un post
 exports.deletePost = (req, res, next) => {
 	dbConnexion.query(
-		`DELETE FROM post WHERE userId=${req.params.id}`,
+		`DELETE FROM post WHERE idPOST=${req.params.id}`,
 		req.params.id,
 		function (error) {
 			if (error) {
@@ -122,10 +128,8 @@ module.exports.commentPost = (req, res) => {
 
 // controller pour voir tous les commentaires
 exports.getAllComment = (req, res, next) => {
-	const idPOST = req.params.id;
-	console.log(idPOST);
 	dbConnexion.query(
-		`SELECT * FROM comment WHERE comment.idPublication = ${idPOST}`,
+		`SELECT * FROM comment WHERE idPublication = ${req.params.id}`,
 		(error, result) => {
 			if (error) {
 				return res.status(400).json(error);
@@ -138,9 +142,9 @@ exports.getAllComment = (req, res, next) => {
 
 // controller pour voir un commentaire
 exports.getOneComment = (req, res, next) => {
-	const id = req.params.id;
 	dbConnexion.query(
-		`SELECT * FROM comment  WHERE idCOM= ${id}`,
+		"SELECT * FROM comment WHERE idCOM= ?",
+		req.params.id,
 		(error, result) => {
 			if (error) {
 				return res.status(400).json({ error });

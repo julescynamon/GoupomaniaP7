@@ -15,16 +15,7 @@ export default function commentReducer(state = initialState, action) {
 				if (comment.idPublication === action.payload.idPublication) {
 					return {
 						...comment,
-						comment: comment.map((comment) => {
-							if (comment.idCOM === action.payload.idCOM) {
-								return {
-									...comment,
-									message: action.payload.message,
-								};
-							} else {
-								return comment;
-							}
-						}),
+						text: action.payload.text,
 					};
 				} else return comment;
 			});

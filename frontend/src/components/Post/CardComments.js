@@ -10,35 +10,26 @@ export default function CardComments({ post }) {
 	const [loadComments, setLoadComments] = useState(true);
 	const usersData = useSelector((state) => state.usersReducer);
 	const userData = useSelector((state) => state.userReducer);
-	const posts = useSelector((state) => state.postReducer);
 	const commentData = useSelector((state) => state.commentReducer);
 	const dispatch = useDispatch();
+	const idPOST = post.idPOST;
+	const idUSER = userData.IdUSER;
+	const username = userData.username;
 
 	useEffect(() => {
 		if (loadComments) {
-			dispatch(getComments({ post }));
-			setLoadComments(false);
+			dispatch(getComments(idPOST));
+			setLoadComments(true);
 		}
-	}, [loadComments, dispatch, post]);
+	}, [loadComments, dispatch, idPOST]);
 
 	const handleComment = (e) => {
 		e.preventDefault();
 
 		if (text) {
-			dispatch(
-				postComments(
-					posts.idPOST,
-					userData.IdUSER,
-					commentData.message,
-					userData.username,
-				),
-			)
-				.then(() => {
-					dispatch(getPosts());
-				})
-				.then(() => {
-					setText("");
-				});
+			dispatch(postComments(idPOST, idUSER, username, text))
+				.then(() => dispatch(getPosts()))
+				.then(() => setText(""));
 		}
 	};
 
@@ -79,16 +70,13 @@ export default function CardComments({ post }) {
 								<div className='comment-header'>
 									<div className='pseudo'>
 										<h3>{comment.commentPseudo}</h3>
-										<span>
-											{timestampParser(comment.timestamp)}
-										</span>
 									</div>
-									<p>{comment.message}</p>
-									<DelComment
-										comment={comment}
-										idPOST={posts.idPOST}
-									/>
+									<span>
+										{timestampParser(comment.timestamp)}
+									</span>
 								</div>
+								<p>{comment.message}</p>
+								<DelComment comment={comment} postId={idPOST} />
 							</div>
 						</div>
 					);
@@ -105,7 +93,8 @@ export default function CardComments({ post }) {
 						onChange={(e) => {
 							setText(e.target.value);
 						}}
-						placeholder='Laissez un commentaire'
+						value={text}
+						placeholder='Laisser un commentaire'
 					/>
 					<br />
 					<input type='submit' value='Envoyer' />
