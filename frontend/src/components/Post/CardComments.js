@@ -34,7 +34,8 @@ export default function CardComments({ post }) {
 		if (text) {
 			dispatch(postComments(idPOST, idUSER, username, text))
 				.then(() => dispatch(getPosts()))
-				.then(() => setText(""));
+				.then(() => setText(""))
+				.then(() => dispatch(getComments(idPOST)));
 		}
 	};
 
