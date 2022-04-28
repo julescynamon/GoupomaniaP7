@@ -1,27 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
 import { UidContext } from "../AppContext";
 import { deleteComment } from "../../Actions/comment.actions";
 
-export default function DelComment(comment, idPOST) {
-	const [isAuthor, setIsAuthor] = useState(false);
+export default function DelComment({ comment, idPOST }) {
 	const uid = useContext(UidContext);
 	const dispatch = useDispatch();
+	const idCOM = comment.idCOM;
 
-	const handleDelete = () => dispatch(deleteComment(idPOST, comment.idCOM));
+	console.log("comment", comment);
+	console.log(uid);
 
-	useEffect(() => {
-		const checkAuthor = () => {
-			if (uid === comment.idCreateur) {
-				setIsAuthor(true);
-			}
-		};
-		checkAuthor();
-	}, [uid, comment.idCreateur]);
+	const handleDelete = () => dispatch(deleteComment(idPOST, idCOM));
 
 	return (
 		<div className='btn'>
-			{isAuthor === false && (
+			{uid === comment.idCreateur && (
 				<span
 					onClick={() => {
 						if (

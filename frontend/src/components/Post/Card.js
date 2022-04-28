@@ -11,8 +11,14 @@ export default function Card({ post }) {
 
 	const usersData = useSelector((state) => state.usersReducer);
 	const userData = useSelector((state) => state.userReducer);
-	const commentData = useSelector((state) => state.commentReducer);
 	const idPOST = post.idPOST;
+	const commentData = useSelector((state) =>
+		state.commentReducer.filter(
+			(comment) => comment.idPublication === idPOST,
+		),
+	);
+
+	const nbComment = commentData.length || post.totalComments;
 
 	useEffect(() => {
 		!isEmpty(usersData[0]) && setIsLoading(false);
@@ -83,12 +89,7 @@ export default function Card({ post }) {
 									src='./img/icons/message1.svg'
 									alt=''
 								/>
-								<span>
-									{!isEmpty(commentData[0]) &&
-										commentData.map((comment) => {
-											return comment.length;
-										})}
-								</span>
+								<span>{nbComment}</span>
 							</div>
 							<div>
 								<img src='./img/icons/heart.svg' alt='' />

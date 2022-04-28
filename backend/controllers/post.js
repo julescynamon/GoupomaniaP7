@@ -8,7 +8,7 @@ const { uploadErrors } = require("../utils/errors");
 // controllers pour recuperer tous les posts de l'app
 module.exports.readPost = (req, res) => {
 	dbConnexion.query(
-		"SELECT * FROM post ORDER BY timestamp DESC;",
+		"SELECT DISTINCT p.*, COUNT(c.idCOM) as totalComments FROM post as p LEFT JOIN comment as c ON c.idPublication = p.idPOST GROUP BY p.idPOST ORDER BY p.timestamp DESC;",
 		(err, result) => {
 			if (err) {
 				res.status(404).json({
@@ -140,23 +140,24 @@ exports.getAllComment = (req, res, next) => {
 	);
 };
 
-// controller pour voir un commentaire
-exports.getOneComment = (req, res, next) => {
-	dbConnexion.query(
-		"SELECT * FROM comment WHERE idCOM= ?",
-		req.params.id,
-		(error, result) => {
-			if (error) {
-				return res.status(400).json({ error });
-			}
+// // controller pour voir un commentaire
+// exports.getOneComment = (req, res, next) => {
+// 	dbConnexion.query(
+// 		"SELECT * FROM comment WHERE idCOM= ?",
+// 		req.params.id,
+// 		(error, result) => {
+// 			if (error) {
+// 				return res.status(400).json({ error });
+// 			}
 
-			return res.status(200).json(result);
-		},
-	);
-};
+// 			return res.status(200).json(result);
+// 		},
+// 	);
+// };
 
 // controllers pour supprimer un commentaire
 module.exports.deleteOneComment = (req, res) => {
+	console.log(req.params.id);
 	dbConnexion.query(
 		"DELETE FROM comment WHERE idCOM= ?",
 		req.params.id,

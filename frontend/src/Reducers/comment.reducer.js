@@ -4,27 +4,24 @@ import {
 	POST_COMMENT,
 } from "../Actions/comment.actions";
 
-const initialState = {};
+const initialState = [];
 
 export default function commentReducer(state = initialState, action) {
 	switch (action.type) {
 		case GET_COMMENT:
-			return action.payload;
+			return []
+				.concat(state, action.payload)
+				.filter(
+					(v, i, a) =>
+						a.findIndex((v2) => v2.idCOM === v.idCOM) === i,
+				);
 		case POST_COMMENT:
-			return state.map((comment) => {
-				if (comment.idPublication === action.payload.idPublication) {
-					return {
-						...comment,
-						text: action.payload.text,
-					};
-				} else return comment;
-			});
+			return [].concat(state, action.payload);
 		case DELETE_COMMENT:
-			return state.map((comment) => {
-				if (comment.idPublication === action.payload.idPublication) {
-					return state;
-				} else return comment;
-			});
+			return state.filter(
+				(comment) =>
+					comment.idPublication !== action.payload.idPublication,
+			);
 		default:
 			return state;
 	}

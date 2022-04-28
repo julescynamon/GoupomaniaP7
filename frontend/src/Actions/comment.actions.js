@@ -45,7 +45,7 @@ export const postComments = (idPOST, idUSER, username, message) => {
 			.then((res) => {
 				dispatch({
 					type: POST_COMMENT,
-					payload: { idPOST },
+					payload: res.data,
 				});
 			})
 			.catch((err) => {
@@ -58,19 +58,19 @@ export const deleteComment = (idPOST, idCOM) => {
 	return (dispatch) => {
 		return axios({
 			method: "delete",
-			url: `${process.env.REACT_APP_API_URL}api/deleteCom/${idCOM}`,
+			url: `${process.env.REACT_APP_API_URL}api/post/deleteCom/${idCOM}`,
 			withCredentials: true,
 			config: {
 				Accept: "application/json",
 			},
 			data: {
-				idCOM: idCOM,
+				idCOM,
 			},
 		})
 			.then((res) => {
 				dispatch({
-					type: POST_COMMENT,
-					payload: { idPOST },
+					type: DELETE_COMMENT,
+					payload: { idPOST, idCOM },
 				});
 			})
 			.catch((err) => {

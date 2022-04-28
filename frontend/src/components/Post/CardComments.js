@@ -10,9 +10,14 @@ export default function CardComments({ post }) {
 	const [loadComments, setLoadComments] = useState(true);
 	const usersData = useSelector((state) => state.usersReducer);
 	const userData = useSelector((state) => state.userReducer);
-	const commentData = useSelector((state) => state.commentReducer);
-	const dispatch = useDispatch();
 	const idPOST = post.idPOST;
+	const commentData = useSelector((state) =>
+		state.commentReducer.filter(
+			(comment) => comment.idPublication === idPOST,
+		),
+	);
+	const dispatch = useDispatch();
+
 	const idUSER = userData.IdUSER;
 	const username = userData.username;
 
@@ -76,7 +81,7 @@ export default function CardComments({ post }) {
 									</span>
 								</div>
 								<p>{comment.message}</p>
-								<DelComment comment={comment} postId={idPOST} />
+								<DelComment comment={comment} idPOST={idPOST} />
 							</div>
 						</div>
 					);
