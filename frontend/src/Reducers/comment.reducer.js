@@ -19,8 +19,7 @@ export default function commentReducer(state = initialState, action) {
 			return [].concat(state, action.payload);
 		case DELETE_COMMENT:
 			return state.filter(
-				(comment) =>
-					comment.idPublication !== action.payload.idPublication,
+				(comment) => comment.idCOM !== action.payload.idCOM,
 			);
 		default:
 			return state;
