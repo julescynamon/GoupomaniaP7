@@ -63,29 +63,32 @@ module.exports.createPost = async (req, res) => {
 				`/Users/julescynamon/Desktop/GoupomaniaP7/frontend/public/uploads/posts/${fileName}`,
 			),
 		);
-	}
+		let { body } = req;
 
-	let { body, file } = req;
+		// if (!file) delete req.body.picture;
 
-	if (!file) delete req.body.picture;
+		body = {
+			...body,
+			picture: req.file !== null ? "./uploads/posts/" + fileName : "",
+		};
+		console.log(body);
 
-	body = {
-		...body,
-		picture: req.body.file,
-	};
-	console.log(body);
-
-	try {
-		dbConnexion.query("INSERT INTO post SET ?", body, (err, results) => {
-			if (err) {
-				res.status(404).json({ err });
-				throw err;
-			} else {
-				res.status(200).json(results);
-			}
-		});
-	} catch (err) {
-		return res.status(400).send(err);
+		try {
+			dbConnexion.query(
+				"INSERT INTO post SET ?",
+				body,
+				(err, results) => {
+					if (err) {
+						res.status(404).json({ err });
+						throw err;
+					} else {
+						res.status(200).json(results);
+					}
+				},
+			);
+		} catch (err) {
+			return res.status(400).send(err);
+		}
 	}
 };
 

@@ -2,10 +2,6 @@
 const express = require("express");
 // creer un routeur
 const router = express.Router();
-// validation mot de passe
-const validPassword = require("../middlewares/passwordValidator");
-// validation email
-const emailValid = require("../middlewares/emailValidator");
 // middleware pour limité le nombre de tentative de connexion
 const limitConnect = require("../middlewares/connectParams");
 // import du controller du user
