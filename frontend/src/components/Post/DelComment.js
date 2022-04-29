@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
 import { UidContext } from "../AppContext";
 import { deleteComment } from "../../Actions/comment.actions";
+import { getPosts } from "../../Actions/post.actions";
 
 export default function DelComment({ comment, idPOST }) {
 	const uid = useContext(UidContext);
@@ -11,7 +12,8 @@ export default function DelComment({ comment, idPOST }) {
 	console.log("comment", comment);
 	console.log(uid);
 
-	const handleDelete = () => dispatch(deleteComment(idPOST, idCOM));
+	const handleDelete = () =>
+		dispatch(deleteComment(idPOST, idCOM)).then(() => dispatch(getPosts()));
 
 	return (
 		<div className='btn'>
