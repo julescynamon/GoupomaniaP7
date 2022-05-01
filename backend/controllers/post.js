@@ -39,6 +39,29 @@ exports.readOnePost = (req, res) => {
 
 // controllers pour creer un post
 module.exports.createPost = async (req, res) => {
+	let { body, file } = req;
+
+	body = {
+		userId: req.body.userId,
+		message: req.body.message,
+	};
+	console.log(body);
+
+	if (!file) delete req.body.picture;
+
+	try {
+		dbConnexion.query("INSERT INTO post SET ?", body, (err, results) => {
+			if (err) {
+				res.status(404).json({ err });
+				throw err;
+			} else {
+				res.status(200).json(results);
+			}
+		});
+	} catch (err) {
+		return res.status(400).send(err);
+	}
+
 	if (req.file !== null) {
 		let fileName;
 		try {
