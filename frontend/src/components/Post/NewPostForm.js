@@ -10,7 +10,7 @@ export default function NewPostForm() {
 	const [postPicture, setPostPicture] = useState(null);
 	const [file, setFile] = useState();
 	const userData = useSelector((state) => state.userReducer);
-	const error = useSelector((state) => state.errorReducer);
+	const error = useSelector((state) => state.errorReducer.postErrors);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -108,6 +108,9 @@ export default function NewPostForm() {
 								</div>
 								{!isEmpty(error.format) && (
 									<p>{error.format}</p>
+								)}
+								{!isEmpty(error.maxSize) && (
+									<p>{error.maxSize}</p>
 								)}
 								<div className='btn-send'>
 									{message || postPicture ? (

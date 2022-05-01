@@ -7,7 +7,6 @@ export default function errorReducer(state = initialState, action) {
 		case GET_POST_ERRORS:
 			return {
 				postErrors: action.payload,
-				userErros: [],
 			};
 		default:
 			return state;
