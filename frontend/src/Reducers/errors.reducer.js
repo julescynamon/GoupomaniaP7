@@ -1,0 +1,15 @@
+import { GET_POST_ERRORS } from "../Actions/post.actions";
+
+const initialState = { postErrors: [] };
+
+export default function errorReducer(state = initialState, action) {
+	switch (action.type) {
+		case GET_POST_ERRORS:
+			return {
+				postErrors: action.payload,
+				userErros: [],
+			};
+		default:
+			return state;
+	}
+}

@@ -55,7 +55,7 @@ module.exports.createPost = async (req, res) => {
 			return res.status(201).json({ errors });
 		}
 
-		fileName = req.body.file;
+		fileName = req.body.userId + Date.now() + ".jpg";
 
 		await pipeline(
 			req.file.stream,
@@ -63,15 +63,17 @@ module.exports.createPost = async (req, res) => {
 				`/Users/julescynamon/Desktop/GoupomaniaP7/frontend/public/uploads/posts/${fileName}`,
 			),
 		);
-		let { body } = req;
 
-		// if (!file) delete req.body.picture;
+		let { body, file } = req;
 
 		body = {
-			...body,
+			userId: req.body.userId,
+			message: req.body.message,
 			picture: req.file !== null ? "./uploads/posts/" + fileName : "",
 		};
 		console.log(body);
+
+		if (!file) delete req.body.picture;
 
 		try {
 			dbConnexion.query(
