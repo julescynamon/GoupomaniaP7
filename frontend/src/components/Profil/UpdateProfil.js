@@ -6,6 +6,7 @@ import { updateBio } from "../../Actions/user.actions";
 
 export default function UpdateProfil() {
 	const userData = useSelector((state) => state.userReducer);
+	const error = useSelector((state) => state.errorReducer);
 	const dispatch = useDispatch();
 	const [bio, setBio] = useState("");
 	const [updateForm, setUpdateForm] = useState(false);
@@ -23,6 +24,8 @@ export default function UpdateProfil() {
 					<h3>Photo de profil</h3>
 					<img src={userData.picture} alt='' />
 					<UploadImg />
+					<p>{error.maxSize}</p>
+					<p>{error.format}</p>
 				</div>
 				<div className='right-part'>
 					<div className='bio-update'>

@@ -3,6 +3,7 @@ import axios from "axios";
 export const GET_USER = "GET_USER";
 export const UPLOAD_PICTURE = "UPLOAD_PICTURE";
 export const UPDATE_BIO = "UPDATE_BIO";
+export const GET_USER_ERRORS = "GET_USER_ERRORS";
 
 export const getUser = (uid) => {
 	return (dispatch) => {
@@ -33,14 +34,25 @@ export const uploadPicture = (data, IdUSER) => {
 			},
 		})
 			.then((res) => {
-				return axios({
-					method: "get",
-					url: `${process.env.REACT_APP_API_URL}api/user/${IdUSER}`,
-					withCredentials: true,
-					config: {
-						Accept: "application/json",
-					},
-				});
+				if (res.data.errors) {
+					dispatch({
+						type: GET_USER_ERRORS,
+						payload: res.data.errors,
+					});
+				} else {
+					dispatch({
+						type: GET_USER_ERRORS,
+						payload: "",
+					});
+					return axios({
+						method: "get",
+						url: `${process.env.REACT_APP_API_URL}api/user/${IdUSER}`,
+						withCredentials: true,
+						config: {
+							Accept: "application/json",
+						},
+					});
+				}
 			})
 			.then((res) => {
 				dispatch({ type: UPLOAD_PICTURE, payload: res.data.picture });

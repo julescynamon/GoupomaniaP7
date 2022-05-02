@@ -4,7 +4,6 @@ import Home from "../../Pages/Home";
 import Trending from "../../Pages/Trending";
 import Login from "../../Pages/Login";
 import Profil from "../../Pages/Profil";
-import PageNotFound from "../../Pages/PageNotFound";
 import NavBarr from "../NavBarr";
 
 export default function Index() {
@@ -16,7 +15,6 @@ export default function Index() {
 				<Route exact path='/home' component={Home} />
 				<Route path='/trending' component={Trending} />
 				<Route path='/profil' component={Profil} />
-				<Route component={PageNotFound} />
 			</Switch>
 		</Router>
 	);
