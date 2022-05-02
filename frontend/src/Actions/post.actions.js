@@ -1,8 +1,12 @@
 import axios from "axios";
 
 export const GET_POST = "GET_POST";
+export const GET_ALL_POSTS = "GET_ALL_POSTS";
 export const CREATE_POST = "CREATE_POST";
 export const DELETE_POST = "DELETE_POST";
+
+// Trends
+export const GET_TRENDS = "GET_TRENDS";
 
 // Erreurs
 export const GET_POST_ERRORS = "GET_POST_ERRORS";
@@ -23,6 +27,7 @@ export const getPosts = (num) => {
 					type: GET_POST,
 					payload: array,
 				});
+				dispatch({ type: GET_ALL_POSTS, payload: res.data });
 			})
 			.catch((err) => {
 				console.log(err);
@@ -72,5 +77,11 @@ export const deletePost = (idPOST) => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+};
+
+export const getTrends = (sortedArray) => {
+	return (dispatch) => {
+		dispatch({ type: GET_TRENDS, payload: sortedArray });
 	};
 };

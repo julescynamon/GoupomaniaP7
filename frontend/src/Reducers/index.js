@@ -4,6 +4,8 @@ import usersReducer from "./users.reducer";
 import postReducer from "./post.reducer";
 import commentReducer from "./comment.reducer";
 import errorReducer from "./errors.reducer";
+import allPostsReducer from "./allPosts.reducer";
+import trendingReducer from "./trending.reducer";
 
 export default combineReducers({
 	userReducer,
@@ -11,4 +13,6 @@ export default combineReducers({
 	postReducer,
 	commentReducer,
 	errorReducer,
+	allPostsReducer,
+	trendingReducer,
 });
