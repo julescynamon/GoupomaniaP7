@@ -41,8 +41,8 @@ module.exports.login = async (req, res) => {
 			email,
 			(err, results) => {
 				if (results == 0) {
-					return res.status(404).json({
-						error: "utilisateur inexistant dans la base de donnée",
+					return res.status(401).json({
+						error: "utilisateur ou mot de passe incorrecte",
 					});
 				}
 
@@ -51,7 +51,7 @@ module.exports.login = async (req, res) => {
 					.then((controlPassword) => {
 						if (!controlPassword) {
 							return res.status(401).json({
-								error: "le mot de passe est incorrecte",
+								error: "utilisateur ou mot de passe est incorrecte",
 							});
 						}
 

@@ -4,17 +4,17 @@ import SignInForm from "./SigninForm";
 
 export default function SignupForm() {
 	const [username, setUsername] = useState("");
+	const [usernameError, setUsernameError] = useState("");
 	const [email, setEmail] = useState("");
+	const [emailError, setEmailError] = useState("");
 	const [password, setPassword] = useState("");
+	const [passwordError, setPasswordError] = useState("");
 	const [controlPassword, setControlPassword] = useState("");
 	const [formSubmit, setFormSubmit] = useState(false);
 
 	const handleRegister = async (e) => {
 		e.preventDefault();
 		const terms = document.getElementById("terms");
-		const usernameError = document.querySelector(".pseudo.error");
-		const emailError = document.querySelector(".email.error");
-		const passwordError = document.querySelector(".password.error");
 		const passwordConfError = document.querySelector(
 			".password-confirm.error",
 		);
@@ -47,17 +47,13 @@ export default function SignupForm() {
 				},
 			})
 				.then((res) => {
-					console.log(res);
-					if (res.data.errors) {
-						usernameError.innerHTML = res.data.errors.username;
-						emailError.innerHTML = res.data.errors.email;
-						passwordError.innerHTML = res.data.errors.password;
-					} else {
-						setFormSubmit(true);
-					}
+					setFormSubmit(true);
 				})
 				.catch((err) => {
-					console.log(err);
+					console.log(err.response);
+					setUsernameError(err.response.data.errors.username);
+					setEmailError(err.response.data.errors.email);
+					setPasswordError(err.response.data.errors.password);
 				});
 		}
 	};
@@ -86,7 +82,7 @@ export default function SignupForm() {
 						value={username}
 						placeholder='entrez votre pseudo'
 					/>
-					<div className='username error'></div>
+					<div className='username error'>{usernameError}</div>
 					<br />
 					<label htmlFor='email'>Email</label>
 					<br />
@@ -100,7 +96,7 @@ export default function SignupForm() {
 						placeholder='entrez votre email'
 						value={email}
 					/>
-					<div className='email error'></div>
+					<div className='email error'>{emailError}</div>
 					<br />
 					<label htmlFor='password'>Mot de passe</label>
 					<br />
@@ -114,7 +110,7 @@ export default function SignupForm() {
 						placeholder='entrez votre mot de passe'
 						value={password}
 					/>
-					<div className='password error'></div>
+					<div className='password error'>{passwordError}</div>
 					<br />
 					<label htmlFor='password-conf'>
 						Confirmer le mot de passe

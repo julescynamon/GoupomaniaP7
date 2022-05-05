@@ -4,11 +4,12 @@ import axios from "axios";
 export default function SigninForm() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [emailError, setEmailError] = useState("");
+	const [passwordError, setPasswordError] = useState("");
 
 	const handleLogin = (e) => {
 		e.preventDefault();
-		const emailError = document.querySelector(".email.error");
-		const passwordError = document.querySelector(".password.error");
+
 		// on utilise axios pour pouvoir relier notre app a notre API et faire des requètes.
 		axios({
 			method: "post",
@@ -23,16 +24,11 @@ export default function SigninForm() {
 			},
 		})
 			.then((res) => {
-				console.log(res);
-				if (res.data.error) {
-					emailError.innerHTML = res.data.error;
-					passwordError.innerHTML = res.data.error;
-				} else {
-					window.location = "/home";
-				}
+				window.location = "/home";
 			})
 			.catch((err) => {
-				console.log(err);
+				setEmailError(err.response.data.error);
+				setPasswordError(err.response.data.error);
 			});
 	};
 
@@ -48,7 +44,7 @@ export default function SigninForm() {
 				placeholder='entrez votre email'
 				value={email}
 			/>
-			<div className='email error'></div>
+			<div className='email error'>{emailError}</div>
 			<br />
 			<label htmlFor='password'>Password</label>
 			<br />
@@ -60,7 +56,7 @@ export default function SigninForm() {
 				placeholder='entrez votre mot de passe'
 				value={password}
 			/>
-			<div className='password error'></div>
+			<div className='password error'>{passwordError}</div>
 			<br />
 			<input type='submit' value='se connecter' />
 		</form>
