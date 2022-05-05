@@ -19,7 +19,9 @@ module.exports.signUp = async (req, res) => {
 		};
 		dbConnexion.query("INSERT INTO user SET ?", user, (err, results) => {
 			if (err) {
-				res.status(400).json({ err });
+				const errors = signUpErrors(err);
+				res.status(401).send({ errors });
+				console.log(errors);
 			} else {
 				res.status(200).json({ message: "Utilisateurs enregistré !" });
 			}
@@ -38,47 +40,42 @@ module.exports.login = async (req, res) => {
 			"SELECT * FROM user WHERE email = ?",
 			email,
 			(err, results) => {
-				if (err) {
-					res.status(400).json({ err });
-				} else {
-					console.log(results);
-
-					if (results == 0) {
-						return res.status(404).json({
-							error: "utilisateur inexistant dans la base de donnée",
-						});
-					}
-
-					bcrypt
-						.compare(req.body.password, results[0].password)
-						.then((controlPassword) => {
-							if (!controlPassword) {
-								return res.status(401).json({
-									error: "le mot de passe est incorrecte",
-								});
-							}
-
-							// on genere le token si tout est valide
-							const token = jwt.sign(
-								{ userId: results[0].IdUSER },
-								`${process.env.JWT_TOKEN}`,
-								{ expiresIn: "24h" },
-							);
-
-							// on enleve le password de la reponse pour plus de sécurité
-							delete results[0].password;
-
-							res.cookie("jwt", token, { httpOnly: true });
-							res.status(200).json({
-								user: results[0].IdUSER,
-								token,
-							});
-						})
-						.catch((err) => {
-							const errors = loginErrors(err);
-							res.status(401).send({ errors });
-						});
+				if (results == 0) {
+					return res.status(404).json({
+						error: "utilisateur inexistant dans la base de donnée",
+					});
 				}
+
+				bcrypt
+					.compare(req.body.password, results[0].password)
+					.then((controlPassword) => {
+						if (!controlPassword) {
+							return res.status(401).json({
+								error: "le mot de passe est incorrecte",
+							});
+						}
+
+						// on genere le token si tout est valide
+						const token = jwt.sign(
+							{ userId: results[0].IdUSER },
+							`${process.env.JWT_TOKEN}`,
+							{ expiresIn: "24h" },
+						);
+
+						// on enleve le password de la reponse pour plus de sécurité
+						delete results[0].password;
+
+						res.cookie("jwt", token, { httpOnly: true });
+						res.status(200).json({
+							user: results[0].IdUSER,
+							token,
+						});
+					})
+					.catch((err) => {
+						const error = loginErrors(err);
+						res.status(401).send({ error });
+						console.log(error);
+					});
 			},
 		);
 	}

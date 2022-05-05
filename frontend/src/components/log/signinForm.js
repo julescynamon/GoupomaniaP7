@@ -25,8 +25,8 @@ export default function SigninForm() {
 			.then((res) => {
 				console.log(res);
 				if (res.data.error) {
-					emailError.innerHTML = res.data.error.email;
-					passwordError.innerHTML = res.data.error.password;
+					emailError.innerHTML = res.data.error;
+					passwordError.innerHTML = res.data.error;
 				} else {
 					window.location = "/home";
 				}

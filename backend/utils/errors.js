@@ -19,17 +19,6 @@ module.exports.signUpErrors = (err) => {
 	return errors;
 };
 
-module.exports.loginErrors = (err) => {
-	let error = { email: "", password: "" };
-
-	if (err.message.includes("email")) error.email = "Email inconnu";
-
-	if (err.message.includes("password"))
-		error.password = "Le mot de passe ne correspond pas";
-
-	return error;
-};
-
 module.exports.uploadErrors = (err) => {
 	let errors = { format: "", maxSize: "" };
 
