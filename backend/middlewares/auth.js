@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 // importation de la connexion mysql
 const dbConnexion = require("../config/db");
 
+// Middleware pour checker si les droits de l'utilisateur a faire tel ou tel action sont bon
 module.exports.checkUser = (req, res, next) => {
 	try {
 		if (req.cookies.jwt) {
@@ -32,6 +33,8 @@ module.exports.checkUser = (req, res, next) => {
 		next();
 	}
 };
+
+// middleware pour checker le token et pour pouvoir voir si la session de l'utilisateur est toujour active
 module.exports.requireAuth = (req, res, next) => {
 	const token = req.cookies.jwt;
 	if (token) {

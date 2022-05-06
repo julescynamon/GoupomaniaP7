@@ -16,6 +16,7 @@ export default function PostFil() {
 			setCount(count + 5);
 		}
 
+		// fonction pour creer mon infinite scroll
 		const loadMore = () => {
 			if (
 				window.innerHeight + document.documentElement.scrollTop + 1 >

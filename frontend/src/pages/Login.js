@@ -3,7 +3,7 @@ import Log from "../Components/Log/Auth";
 import { UidContext } from "../Components/AppContext";
 import Home from "./Home";
 
-export default function Login({ store }) {
+export default function Login() {
 	const uid = useContext(UidContext);
 
 	return (

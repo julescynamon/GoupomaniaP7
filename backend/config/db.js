@@ -8,7 +8,7 @@ const dbConnect = db.createConnection({
 	password: "",
 	database: "reseau_social",
 });
-
+// parametre de reponse de ma base de donnee
 dbConnect.connect((err) => {
 	if (err) {
 		console.log("erreur de connection: " + err);

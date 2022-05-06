@@ -5,6 +5,7 @@ const { promisify } = require("util");
 const pipeline = promisify(require("stream").pipeline);
 const { uploadErrors } = require("../utils/errors");
 
+// Controller avec verification de securiter lors de l'upload d'une imade de profil
 module.exports.uploadProfil = async (req, res) => {
 	try {
 		if (

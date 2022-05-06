@@ -1,3 +1,4 @@
+// Fonction pour pouvoir afficher une date comprehensible lors de l'affichage des posts et pouvoir trier ces posts du plus recent au plus ancien
 export const dateParser = (num) => {
 	let options = {
 		hour: "2-digit",
@@ -16,6 +17,7 @@ export const dateParser = (num) => {
 	return date.toString();
 };
 
+// Fonction pour pouvoir afficher une date comprehensible lors de l'ajout d'un post
 export const timestampParser = (num) => {
 	let options = {
 		hour: "2-digit",
@@ -32,6 +34,7 @@ export const timestampParser = (num) => {
 	return date.toString();
 };
 
+// Foncton pour savoir si lorsque j'appel un store il est vide ou pas
 export const isEmpty = (value) => {
 	return (
 		value === undefined ||

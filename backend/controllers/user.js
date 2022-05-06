@@ -1,6 +1,7 @@
 // importation de la connexion mysql
 const dbConnexion = require("../config/db");
 
+// controller pour obtenir toutes les infos de tous nos utilisateurs
 module.exports.getAllUsers = async (req, res) => {
 	dbConnexion.query(
 		"SELECT idUSER, username, bio, email, picture FROM user",
@@ -15,6 +16,7 @@ module.exports.getAllUsers = async (req, res) => {
 	);
 };
 
+// controller pour obtenir toutes les infos d'un utilisateur
 module.exports.getOneUser = async (req, res) => {
 	dbConnexion.query(
 		`SELECT * FROM user WHERE idUSER=${req.params.id}`,
@@ -30,6 +32,7 @@ module.exports.getOneUser = async (req, res) => {
 	);
 };
 
+// controller pour modifier la bio ou l'image de notre utilisateur
 exports.updateOneUser = (req, res, next) => {
 	const { bio } = req.body;
 	console.log(bio);
@@ -49,6 +52,7 @@ exports.updateOneUser = (req, res, next) => {
 	);
 };
 
+// controller pour supprimer le compte d'un utilisateur
 module.exports.deleteUser = async (req, res) => {
 	dbConnexion.query(
 		`DELETE FROM user WHERE idUSER=${req.params.id}`,

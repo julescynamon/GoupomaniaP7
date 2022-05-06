@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 // import de la fonction error pour avoir une lecture propre des erreurs
 const { signUpErrors, loginErrors } = require("../utils/errors");
 
+// Controller de la creation d'un nouvel utilisateur
 module.exports.signUp = async (req, res) => {
 	try {
 		const { password: password } = req.body;
@@ -32,6 +33,7 @@ module.exports.signUp = async (req, res) => {
 	}
 };
 
+// Controller de login quand un utilisateur deja present dans notre bdd veut acceder a notre site
 module.exports.login = async (req, res) => {
 	const { email, password } = req.body;
 
@@ -81,6 +83,7 @@ module.exports.login = async (req, res) => {
 	}
 };
 
+// controller pour se deconnecter de la session
 exports.logout = (req, res) => {
 	res.clearCookie("jwt");
 	res.status(200).json("OUT");

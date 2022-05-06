@@ -14,7 +14,7 @@ export default function Trending() {
 				<ul>
 					{!isEmpty(trendList[0]) &&
 						trendList.map((post) => (
-							<Card post={post} key={post._id} />
+							<Card post={post} key={post.idPOST} />
 						))}
 				</ul>
 			</div>

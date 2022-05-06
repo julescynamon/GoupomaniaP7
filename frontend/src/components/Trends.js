@@ -11,6 +11,7 @@ export default function Trends() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		// fonction pour classer les 3 derniers posts les plus recents en fonctions de leur date d'ajout
 		if (!isEmpty(allPosts[0])) {
 			const allPostsArr = Object.keys(allPosts).map((i) => allPosts[i]);
 			let sortedArray = allPostsArr.sort((a, b) => {
@@ -36,6 +37,7 @@ export default function Trends() {
 												alt='postPic'
 											/>
 										)}
+										{/* fonction pour mettre la photo de profil du posteur si il n'y a pas de photo dans son post  */}
 										{isEmpty(post.picture) && (
 											<img
 												src={
