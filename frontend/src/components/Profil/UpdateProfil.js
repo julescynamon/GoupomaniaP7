@@ -22,7 +22,12 @@ export default function UpdateProfil() {
 			<div className='update-container'>
 				<div className='left-part'>
 					<h3>Photo de profil</h3>
-					<img src={userData.picture} alt='' />
+					{userData.picture ? (
+						<img src={userData.picture} alt='' />
+					) : (
+						<img src='./uploads/profil/random-user.png' alt='' />
+					)}
+
 					<UploadImg />
 					<p>{error.maxSize}</p>
 					<p>{error.format}</p>
