@@ -47,7 +47,7 @@ module.exports.login = async (req, res) => {
 						error: "utilisateur ou mot de passe incorrecte",
 					});
 				}
-
+				console.log(results);
 				bcrypt
 					.compare(req.body.password, results[0].password)
 					.then((controlPassword) => {
