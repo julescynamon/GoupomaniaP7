@@ -1,12 +1,11 @@
 const db = require("mysql");
-require("dotenv").config({ path: "./.env" });
 
 // parametre de connexion a la base de donnees
 const dbConnect = db.createConnection({
-	host: "localhost",
-	user: "root",
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
 	password: "",
-	database: "reseau_social",
+	database: process.env.DB_NAME,
 });
 // parametre de reponse de ma base de donnee
 dbConnect.connect((err) => {
