@@ -18,7 +18,7 @@ Ensuite, lancer le server :
 
 npm run start
 
-Enfin, pour lancer le Front, ouvrir un nouveau terminal et se rendre dans le dossier front-end
+Enfin, pour lancer le Front, ouvrir un nouveau terminal et se rendre dans le dossier frontend
 
 cd frontend/
 
