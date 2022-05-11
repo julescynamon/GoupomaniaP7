@@ -2,7 +2,7 @@ GROUPOMANIA
 
 Ceci est le dernier projet de ma formation Openclassrooms, création d'un réseau social d'entreprise : Groupomania
 
-J'ai réalise tout le BackEnd et tout le FrontEnd. C'est mon premier projet utilisant SQL, et j'ai choisis d'utiliser MySQL sans utiliser d'ORM et en se servant du serveur MAMP et PHPMyAdmin pour visualiser ma BDD.
+J'ai réalise tout le BackEnd et tout le FrontEnd. C'est mon premier projet utilisant SQL, et j'ai choisis d'utiliser MySQL sans utiliser d'ORM et en se servant du serveur XAMPP et PHPMyAdmin pour visualiser ma BDD.
 
 C'est également mon premier projet avec React. J'ai beaucoup appris, mais je sens qu'il va falloir encore quelques projets pour bien utiliser REACT, pour ce projet j'ai choisie de rester sur la version 17, en effet la version 18 est sortie au cour de mon apprentissage et je n'avais pas le temps de tout reprendre car il y a beaucoup de changement dans cette nouvelle version.
 
