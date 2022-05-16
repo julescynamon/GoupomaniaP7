@@ -22,12 +22,16 @@ Enfin, pour lancer le Front, ouvrir un nouveau terminal et se rendre dans le dos
 
 cd frontend/
 
+Lancer l'instalation de mon packageJson:
+
+npm install 
+
 puis lancer react
 
 npm start
 
 Penser a bien lancer votre base de donnee MYSQL en changeant les codes de connexions dans le dossier du backend/config/db.js avant de faire un npm run start.
 La config de la BDD est dans le dossier backend/configSql.
-Pour la config du dossier .env coté back aller voir dans le dossier backend/config/.env.info
+Pour la config du dossier .env coté back aller voir dans le fichier .env.info
 Pour la config du dossier .env coté front aller voir dans le dossier frontend/config/.env.info
 Si il y a des erreurs, essayer de lancer ces commandes en étant admin.
