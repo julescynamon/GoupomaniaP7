@@ -4,7 +4,7 @@ const db = require("mysql");
 const dbConnect = db.createConnection({
 	host: process.env.DB_HOST,
 	user: process.env.DB_USER,
-	password: "",
+	password: process.env.DB_PASSWORD,
 	database: process.env.DB_NAME,
 });
 // parametre de reponse de ma base de donnee

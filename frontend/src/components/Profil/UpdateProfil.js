@@ -3,6 +3,7 @@ import NavBarrLeft from "../NavBarrLeft";
 import { useSelector, useDispatch } from "react-redux";
 import UploadImg from "./UploadImg";
 import { updateBio } from "../../Actions/user.actions";
+import DeleteUser from "./DeleteUser";
 
 export default function UpdateProfil() {
 	const userData = useSelector((state) => state.userReducer);
@@ -61,6 +62,9 @@ export default function UpdateProfil() {
 						)}
 					</div>
 				</div>
+			</div>
+			<div className='button-danger'>
+				<DeleteUser id={userData.IdUSER} />
 			</div>
 		</div>
 	);

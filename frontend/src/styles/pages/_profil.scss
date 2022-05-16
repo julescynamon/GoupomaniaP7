@@ -140,7 +140,7 @@
             grid-template-columns: 1fr;
         }
 
-        >div {
+        div {
             background: $color-4;
             border-radius: 20px;
             padding: 25px;
@@ -371,6 +371,25 @@
                         }
                     }
                 }
+            }
+        }
+    }
+
+    .button-danger {
+        justify-content: center;
+        display: flex;
+
+        div {
+            padding: 5px 9px;
+            margin-left: 5px;
+            background: $color-2;
+            border-radius: 50px;
+            transition: 0.1s;
+            cursor: pointer;
+            color: $color-1;
+
+            &:hover {
+                transform: scale(1.07);
             }
         }
     }

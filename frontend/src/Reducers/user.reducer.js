@@ -1,4 +1,4 @@
-import { GET_USER } from "../Actions/user.actions";
+import { DELETE_USER, GET_USER } from "../Actions/user.actions";
 import { UPLOAD_PICTURE } from "../Actions/user.actions";
 import { UPDATE_BIO } from "../Actions/user.actions";
 
@@ -18,6 +18,8 @@ export default function userReducer(state = initialState, action) {
 				...state,
 				bio: action.payload,
 			};
+		case DELETE_USER:
+			return initialState;
 		default:
 			return state;
 	}

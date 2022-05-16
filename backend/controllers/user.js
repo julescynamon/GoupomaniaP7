@@ -57,13 +57,12 @@ module.exports.deleteUser = async (req, res) => {
 	dbConnexion.query(
 		`DELETE FROM user WHERE idUSER=${req.params.id}`,
 		req.params.id,
-		function (error) {
+		(error, results) =>  {
 			if (error) {
 				return res.status(400).json(error);
 			}
-			return res
-				.status(200)
-				.json({ message: "Votre compte a bien été supprimé !" });
+			res.clearCookie("jwt");
+			res.status(200).json("Votre compte a bien ete supprimer");
 		},
 	);
 };

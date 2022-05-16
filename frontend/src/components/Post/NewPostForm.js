@@ -55,7 +55,14 @@ export default function NewPostForm() {
 					<div className='data'>
 						<NavLink exact to='/profil'>
 							<div className='user-info'>
-								<img src={userData.picture} alt='user-img' />
+								{userData.picture ? (
+									<img src={userData.picture} alt='pic-user' />
+								) : (
+									<img
+										src='./uploads/profil/random-user.png'
+										alt=''
+									/>
+								)}
 							</div>
 						</NavLink>
 						<div className='post-form'>
@@ -69,10 +76,17 @@ export default function NewPostForm() {
 							{message || postPicture ? (
 								<li className='card-container'>
 									<div className='card-left'>
-										<img
-											src={userData.picture}
-											alt='userPic'
-										/>
+										{userData.picture ? (
+											<img
+												src={userData.picture}
+												alt='pic-user'
+											/>
+										) : (
+											<img
+												src='./uploads/profil/random-user.png'
+												alt=''
+											/>
+										)}
 									</div>
 									<div className='card-right'>
 										<div className='card-header'>

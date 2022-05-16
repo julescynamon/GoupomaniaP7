@@ -36,8 +36,12 @@ export default function Card({ post }) {
 								!isEmpty(usersData[0]) &&
 								usersData
 									.map((user) => {
-										if (user.idUSER === post.userId) {
-											return user.picture;
+										if (user.idUSER === post.userId ) {
+											if(user.picture !== null){
+												return user.picture
+											} else {
+												return "./uploads/profil/random-user.png";
+											} 
 										} else {
 											return null;
 										}
