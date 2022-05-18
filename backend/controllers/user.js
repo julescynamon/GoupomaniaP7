@@ -39,7 +39,7 @@ exports.updateOneUser = (req, res, next) => {
 	const { id: userId } = req.params;
 	console.log(userId);
 	dbConnexion.query(
-		`UPDATE user SET bio = "${bio}" WHERE user.idUSER = ${userId};`,
+		`UPDATE user SET bio = "${bio}" WHERE user.IdUSER = ${userId};`,
 		(err, result) => {
 			if (err) {
 				res.status(404).json({ err });
@@ -57,7 +57,7 @@ module.exports.deleteUser = async (req, res) => {
 	dbConnexion.query(
 		`DELETE FROM user WHERE idUSER=${req.params.id}`,
 		req.params.id,
-		(error, results) =>  {
+		(error, results) => {
 			if (error) {
 				return res.status(400).json(error);
 			}

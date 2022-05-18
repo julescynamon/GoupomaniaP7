@@ -25,12 +25,10 @@ module.exports.checkUser = (req, res, next) => {
 			});
 		} else {
 			res.status(401).json({ message: "Unauthorized" });
-			next();
 		}
 	} catch (err) {
 		console.log(err);
 		res.status(401).json({ message: "Unauthorized" });
-		next();
 	}
 };
 
@@ -41,7 +39,7 @@ module.exports.requireAuth = (req, res, next) => {
 		jwt.verify(token, process.env.JWT_TOKEN, async (err, decodedToken) => {
 			if (err) {
 				console.log(err);
-				res.status(200).json({message: "no token"});
+				res.status(200).json({ message: "no token" });
 			} else {
 				console.log(decodedToken.userId);
 				next();
@@ -49,5 +47,31 @@ module.exports.requireAuth = (req, res, next) => {
 		});
 	} else {
 		console.log("No token");
+	}
+};
+
+module.exports.checkAuth = (req, res, next) => {
+	try {
+		if (req.cookies.jwt) {
+			const token = req.cookies.jwt;
+			const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
+			console.log(decodedToken);
+			const { IdUSER: userId } = decodedToken;
+			console.log(userId);
+			const sql = `SELECT IdUSER FROM users WHERE IdUSER = ${userId}`;
+			dbConnexion.query(sql, (err, result) => {
+				if (err) res.status(204).json(err);
+				else {
+					next();
+				}
+			});
+		} else {
+			res.clearCookie();
+			res.status(401).json({ message: "Unauthorized" });
+		}
+	} catch (err) {
+		res.clearCookie();
+		console.log(err);
+		res.status(401).json({ message: "Unauthorized" });
 	}
 };
