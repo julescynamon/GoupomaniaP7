@@ -10,7 +10,7 @@ const userControlls = require("../controllers/user");
 const uploadController = require("../controllers/uploads");
 const multer = require("multer");
 const upload = multer();
-const { checkUser, checkAuth } = require("../middlewares/auth");
+const { checkUser } = require("../middlewares/auth");
 
 // Mise en place des chemins d'acces au routes
 // Route pour l'inscription
